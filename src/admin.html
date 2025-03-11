@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка</title>
+</head>
+<body>
+    <header>
+        <h1>Панель администратора</h1>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="booking.html">Бронирование</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Управление залами</h2>
+        <div id="halls">
+            <p>Загрузка данных...</p>
+        </div>
+        <h3>Добавить новый зал</h3>
+        <form id="add-hall-form">
+            <input type="text" id="hall-name" placeholder="Название зала" required>
+            <button type="submit">Добавить</button>
+        </form>
+
+        <h2>Управление фильмами</h2>
+        <div id="films">
+            <p>Загрузка данных...</p>
+        </div>
+        <h3>Добавить новый фильм</h3>
+        <form id="add-film-form">
+            <input type="text" id="film-name" placeholder="Название фильма" required>
+            <input type="number" id="film-duration" placeholder="Длительность (мин)" required>
+            <input type="text" id="film-origin" placeholder="Страна" required>
+            <input type="file" id="film-poster" accept="image/png" required>
+            <button type="submit">Добавить</button>
+        </form>
+
+        <h2>Управление сеансами</h2>
+        <div id="seances">
+            <p>Загрузка данных...</p>
+        </div>
+        <h3>Добавить новый сеанс</h3>
+        <form id="add-seance-form">
+            <select id="seance-hall" required>
+                <option value="" disabled selected>Выберите зал</option>
+            </select>
+            <select id="seance-film" required>
+                <option value="" disabled selected>Выберите фильм</option>
+            </select>
+            <input type="time" id="seance-time" required>
+            <button type="submit">Добавить</button>
+        </form>
+    </main>
+    <script src="bundle.js"></script>
+</body>
+</html>
