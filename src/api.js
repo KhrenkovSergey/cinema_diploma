@@ -1,12 +1,5 @@
 const API_BASE = 'https://shfe-diplom.neto-server.ru/';
 
-/**
- * Запрос к API
- * @param {string} endpoint - Конечный адрес (например, 'alldata')
- * @param {string} method - Метод запроса (GET, POST, DELETE)
- * @param {Object} body - Данные для запроса (опционально)
- * @returns {Promise<Object>} - Ответ API в формате JSON
- */
 export async function apiRequest(endpoint, method = 'GET', body = null) {
     try {
         const options = { method };
