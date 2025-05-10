@@ -1,58 +1,168 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админка</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Администратор — Кинотеатр</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    /* Простая стилизация модалок */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      z-index: 1000;
+      max-width: 90%;
+      width: 400px;
+      border-radius: 5px;
+    }
+    .hidden {
+      display: none;
+    }
+    .modal h2 {
+      margin-top: 0;
+    }
+    .modal form label {
+      display: block;
+      margin: 0.5rem 0;
+    }
+    .modal form input,
+    .modal form select,
+    .modal form textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 0.25rem;
+    }
+    .modal form button {
+      margin-top: 1rem;
+      margin-right: 0.5rem;
+    }
+  </style>
 </head>
 <body class="admin-page">
-    <header>
-        <h1>Панель администратора</h1>
-        <nav>
-            <a href="index.html">Главная</a>
-            <a href="booking.html">Бронирование</a>
-        </nav>
-    </header>
-    <main>
-        <h2>Управление залами</h2>
-        <div id="halls">
-            <p>Загрузка данных...</p>
+  <header>
+    <h1>Администратор</h1>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="booking.html">Бронирование</a>
+    </nav>
+  </header>
+  <main class="container py-4">
+    <!-- Управление залами -->
+    <section class="mb-4">
+      <h2>Управление залами</h2>
+      <div id="halls" class="mb-2"></div>
+      <form id="add-hall-form" class="row g-2">
+        <div class="col-auto">
+          <input type="text" id="hall-name" class="form-control" placeholder="Название зала">
         </div>
-        <h3>Добавить новый зал</h3>
-        <form id="add-hall-form">
-            <input type="text" id="hall-name" placeholder="Название зала" required>
-            <button type="submit">Добавить</button>
-        </form>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary">Создать зал</button>
+        </div>
+      </form>
+    </section>
 
-        <h2>Управление фильмами</h2>
-        <div id="films">
-            <p>Загрузка данных...</p>
-        </div>
-        <h3>Добавить новый фильм</h3>
-        <form id="add-film-form">
-            <input type="text" id="film-name" placeholder="Название фильма" required>
-            <input type="number" id="film-duration" placeholder="Длительность (мин)" required>
-            <input type="text" id="film-origin" placeholder="Страна" required>
-            <input type="file" id="film-poster" accept="image/png" required>
-            <button type="submit">Добавить</button>
-        </form>
+    <!-- Управление фильмами -->
+    <section class="mb-4">
+      <h2>Управление фильмами</h2>
+      <div id="films" class="mb-2 row gy-3"></div>
+      <button id="show-add-film" class="btn btn-success">Добавить фильм</button>
+    </section>
 
-        <h2>Управление сеансами</h2>
-        <div id="seances">
-            <p>Загрузка данных...</p>
+    <!-- Модалка: Добавление фильма -->
+    <section id="add-film-modal" class="modal hidden">
+      <h2>Добавление фильма</h2>
+      <form id="add-film-form">
+        <label>
+          Название фильма
+          <input type="text" id="film-name" required>
+        </label>
+        <label>
+          Продолжительность (мин)
+          <input type="number" id="film-duration" required>
+        </label>
+        <label>
+          Описание
+          <textarea id="film-description" rows="3"></textarea>
+        </label>
+        <label>
+          Страна
+          <input type="text" id="film-origin" required>
+        </label>
+        <label>
+          Постер (PNG, ≤3 МБ)
+          <input type="file" id="film-poster" accept="image/png" required>
+        </label>
+        <button type="submit" class="btn btn-primary">Добавить фильм</button>
+        <button type="button" id="cancel-add-film" class="btn btn-secondary">Отменить</button>
+      </form>
+    </section>
+
+    <!-- Управление сеансами -->
+    <section class="mb-4">
+      <h2>Управление сеансами</h2>
+      <div id="seances" class="mb-2"></div>
+      <button id="show-add-seance" class="btn btn-success">Добавить сеанс</button>
+    </section>
+
+    <!-- Модалка: Добавление сеанса -->
+    <section id="add-seance-modal" class="modal hidden">
+      <h2>Добавление сеанса</h2>
+      <form id="add-seance-form">
+        <label>
+          Зал
+          <select id="seance-hall" required></select>
+        </label>
+        <label>
+          Фильм
+          <select id="seance-film" required></select>
+        </label>
+        <label>
+          Время начала
+          <input type="time" id="seance-time" required>
+        </label>
+        <button type="submit" class="btn btn-primary">Добавить сеанс</button>
+        <button type="button" id="cancel-add-seance" class="btn btn-secondary">Отменить</button>
+      </form>
+    </section>
+
+    <!-- Конфигурация зала -->
+    <section id="hall-config" class="mb-4">
+      <h2>Конфигурация зала</h2>
+      <select id="config-hall-select" class="form-select mb-2"></select>
+      <div class="row g-2 mb-2">
+        <div class="col">
+          <label>Рядов<input type="number" id="config-row-count" class="form-control" min="1"></label>
         </div>
-        <h3>Добавить новый сеанс</h3>
-        <form id="add-seance-form">
-            <select id="seance-hall" required>
-                <option value="" disabled selected>Выберите зал</option>
-            </select>
-            <select id="seance-film" required>
-                <option value="" disabled selected>Выберите фильм</option>
-            </select>
-            <input type="time" id="seance-time" required>
-            <button type="submit">Добавить</button>
-        </form>
-    </main>
-    <script src="bundle.js"></script>
+        <div class="col">
+          <label>Мест<input type="number" id="config-place-count" class="form-control" min="1"></label>
+        </div>
+      </div>
+      <div id="config-seat-map" class="mb-2"></div>
+      <button id="save-hall-config" class="btn btn-primary">Сохранить</button>
+      <button id="cancel-hall-config" class="btn btn-secondary">Отмена</button>
+    </section>
+
+    <!-- Конфигурация цен -->
+    <section id="price-config">
+      <h2>Конфигурация цен</h2>
+      <select id="price-hall-select" class="form-select mb-2"></select>
+      <div class="row g-2 mb-2">
+        <div class="col">
+          <label>Цена стандартного<input type="number" id="price-standard" class="form-control"></label>
+        </div>
+        <div class="col">
+          <label>Цена VIP<input type="number" id="price-vip" class="form-control"></label>
+        </div>
+      </div>
+      <button id="save-price-config" class="btn btn-primary">Сохранить</button>
+      <button id="cancel-price-config" class="btn btn-secondary">Отмена</button>
+    </section>
+  </main>
+  <script src="bundle.js"></script>
 </body>
 </html>

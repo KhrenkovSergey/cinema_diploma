@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кинотеатр</title>
-    <link rel="stylesheet" href="styles/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Кинотеатр</title>
+  <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
-    <header>
-        <h1>Кинотеатр</h1>
-        <nav>
-            <a href="index.html">Главная</a>
-            <a href="booking.html">Бронирование</a>
-            <a href="login.html">Вход для администратора</a>
-        </nav>
-    </header>
-    <main>
-        <section id="schedule">
-            <p>Загрузка расписания...</p>
-        </section>
-    </main>
-    <script src="bundle.js"></script>
+  <header>
+    <h1>Кинотеатр</h1>
+    <nav>
+      <a href="index.html" class="active">Главная</a>
+      <a href="booking.html">Бронирование</a>
+      <a href="login.html">Вход для администратора</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container my-4">
+      <!-- расписание в сетке: от 1 колонки на xs до 3 на lg -->
+      <section id="schedule" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col">
+          <p>Загрузка расписания...</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="bundle.js"></script>
 </body>
 </html>
