@@ -3,30 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Кинотеатр</title>
-  <link rel="stylesheet" href="styles/main.css" />
+  <title>Идём в кино</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<body>
-  <header>
-    <h1>Кинотеатр</h1>
-    <nav>
-      <a href="index.html" class="active">Главная</a>
-      <a href="booking.html">Бронирование</a>
-      <a href="login.html">Вход для администратора</a>
-    </nav>
+<body class="bg-main">
+  <header class="header">
+    <div class="container">
+      <div class="header__content">
+        <div class="header__logo">
+          <span class="header__logo-text">Идём</span>
+          <span class="header__logo-text header__logo-text--accent">в</span>
+          <span class="header__logo-text">кино</span>
+        </div>
+        <a href="admin.html" class="header__login-btn">Войти</a>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <div class="container my-4">
-      <!-- расписание в сетке: от 1 колонки на xs до 3 на lg -->
-      <section id="schedule" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <div class="col">
-          <p>Загрузка расписания...</p>
-        </div>
-      </section>
+  <main class="schedule">
+    <div class="schedule__dates">
+      <div class="schedule__date-slider">
+        <!-- Даты будут добавлены через JavaScript -->
+      </div>
+    </div>
+    <div class="schedule__content">
+      <!-- Контент будет добавлен через JavaScript -->
     </div>
   </main>
 
-  <script src="bundle.js"></script>
+  <script src="main.bundle.js"></script>
 </body>
 </html>

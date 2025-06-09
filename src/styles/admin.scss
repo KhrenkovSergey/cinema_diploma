@@ -1,0 +1,243 @@
+// Импорт основных стилей
+@import './main.scss';
+
+// Специфичные стили для админ-панели
+.admin-page {
+    background-color: $secondary-color;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.admin-header {
+    background-color: darken($secondary-color, 10%);
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+
+    h1 {
+        color: $white;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+}
+
+// Секции админ-панели
+.admin-section {
+    background-color: $white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &__title {
+        color: $secondary-color;
+        margin-bottom: 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        button {
+            font-size: 0.875rem;
+        }
+    }
+
+    &__content {
+        padding: 1rem 0;
+    }
+}
+
+// Управление залами
+.hall-list {
+    display: grid;
+    gap: 1rem;
+
+    .hall-item {
+        background-color: rgba($secondary-color, 0.05);
+        padding: 1rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &__name {
+            font-weight: 500;
+            color: $secondary-color;
+        }
+
+        &__controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+    }
+}
+
+// Конфигурация зала
+.hall-config {
+    &__grid {
+        display: grid;
+        gap: 0.25rem;
+        justify-content: center;
+        margin: 1.5rem 0;
+    }
+
+    &__row {
+        display: flex;
+        gap: 0.25rem;
+        justify-content: center;
+    }
+
+    &__seat {
+        width: 25px;
+        height: 25px;
+        border: 1px solid $secondary-color;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &--selected {
+            background-color: $primary-color;
+            border-color: $primary-color;
+        }
+
+        &--vip {
+            background-color: rgba($primary-color, 0.2);
+            border-color: $primary-color;
+        }
+    }
+}
+
+// Сетка сеансов
+.timeline {
+    position: relative;
+    background-color: rgba($secondary-color, 0.05);
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+    min-height: 100px;
+
+    &__hours {
+        display: flex;
+        border-bottom: 1px solid rgba($secondary-color, 0.2);
+        margin-bottom: 1rem;
+
+        .hour {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            color: $secondary-color;
+        }
+    }
+
+    &__events {
+        position: relative;
+        min-height: 60px;
+    }
+
+    &__event {
+        position: absolute;
+        top: 0;
+        height: 50px;
+        background-color: $primary-color;
+        border-radius: 4px;
+        padding: 0.5rem;
+        color: $white;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+    }
+}
+
+// Модальные окна
+.modal {
+    &__header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba($secondary-color, 0.2);
+
+        h3 {
+            margin: 0;
+            color: $secondary-color;
+        }
+    }
+
+    &__footer {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba($secondary-color, 0.2);
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+}
+
+// Формы
+.form-group {
+    margin-bottom: 1rem;
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: $secondary-color;
+        font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid rgba($secondary-color, 0.2);
+        border-radius: 4px;
+        transition: all 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+        }
+    }
+}
+
+// Кнопки
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+
+    &-primary {
+        background-color: $primary-color;
+        color: $white;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+
+    &-secondary {
+        background-color: rgba($secondary-color, 0.1);
+        color: $secondary-color;
+
+        &:hover {
+            background-color: rgba($secondary-color, 0.2);
+        }
+    }
+
+    &-danger {
+        background-color: #dc3545;
+        color: $white;
+
+        &:hover {
+            background-color: darken(#dc3545, 10%);
+        }
+    }
+} 

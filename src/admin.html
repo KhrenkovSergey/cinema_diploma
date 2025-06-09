@@ -2,8 +2,9 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Админка — Кинотеатр</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Администрирование - Идём в кино</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/main.css">
   <style>
     .modal {
@@ -70,156 +71,191 @@
   </style>
 </head>
 <body class="admin-page">
-  <header>
-    <h1>Администратор</h1>
-    <nav>
-      <a href="index.html">Главная</a>
-      <a href="booking.html">Бронирование</a>
-      <a href="admin.html" class="active">Админка</a>
-    </nav>
+  <header class="admin-header">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1>Администрирование</h1>
+        <a href="index.html" class="btn btn-outline-light">Выйти</a>
+      </div>
+    </div>
   </header>
-  <main class="container py-4">
 
+  <main class="container">
+    <!-- Управление залами -->
     <section class="admin-section">
-      <h2 class="section-title">Управление залами</h2>
-      <div id="halls" class="mb-3"></div>
-      <form id="add-hall-form" class="row g-2 px-3">
-        <div class="col-8 col-md-6">
-          <input type="text" id="hall-name" class="form-control" placeholder="Название зала">
-        </div>
-        <div class="col-4 col-md-2">
-          <button type="submit" class="btn btn-primary w-100">Создать зал</button>
-        </div>
-      </form>
-    </section>
-
-    <hr class="admin-divider">
-
-    <section class="admin-section">
-      <h2 class="section-title">Конфигурация залов</h2>
-      <select id="config-hall-select" class="form-select mb-2"></select>
-      <div class="row g-2 mb-2 px-3">
-        <div class="col">
-          <label class="w-100">Рядов<input type="number" id="config-row-count" class="form-control" min="1"></label>
-        </div>
-        <div class="col">
-          <label class="w-100">Мест<input type="number" id="config-place-count" class="form-control" min="1"></label>
-        </div>
+      <div class="admin-section__title">
+        <h2>Управление залами</h2>
+        <button class="btn btn-primary" id="add-hall-btn">Добавить зал</button>
       </div>
-      <div id="config-seat-map" class="mb-2"></div>
-      <div class="d-flex gap-3 px-3">
-        <button id="save-hall-config" class="btn btn-primary">Сохранить</button>
-        <button id="cancel-hall-config" class="btn btn-secondary">Отмена</button>
+      <div id="halls" class="hall-list">
+        <!-- Здесь будет список залов -->
       </div>
     </section>
 
-    <hr class="admin-divider">
-
+    <!-- Конфигурация залов -->
     <section class="admin-section">
-      <h2 class="section-title">Конфигурация цен</h2>
-      <select id="price-hall-select" class="form-select mb-2"></select>
-      <div class="row g-2 mb-2 px-3">
-        <div class="col">
-          <label class="w-100">Цена стандартного<input type="number" id="price-standard" class="form-control"></label>
-        </div>
-        <div class="col">
-          <label class="w-100">Цена VIP<input type="number" id="price-vip" class="form-control"></label>
-        </div>
+      <div class="admin-section__title">
+        <h2>Конфигурация залов</h2>
       </div>
-      <div class="d-flex gap-3 px-3">
-        <button id="save-price-config" class="btn btn-primary">Сохранить</button>
-        <button id="cancel-price-config" class="btn btn-secondary">Отмена</button>
-      </div>
-    </section>
-
-    <hr class="admin-divider">
-
-    <section class="admin-section">
-      <h2 class="section-title">Управление фильмами</h2>
-      <div id="films" class="mb-2 row gy-3"></div>
-      <button id="show-add-film" class="btn btn-success ms-3">Добавить фильм</button>
-    </section>
-
-    <section id="add-film-modal" class="modal hidden">
-      <h2>Добавление фильма</h2>
-      <form id="add-film-form">
-        <label>
-          Название фильма
-          <input type="text" id="film-name" required>
-        </label>
-        <label>
-          Продолжительность (мин)
-          <input type="number" id="film-duration" required>
-        </label>
-        <label>
-          Описание
-          <textarea id="film-description" rows="3"></textarea>
-        </label>
-        <label>
-          Страна
-          <input type="text" id="film-origin" required>
-        </label>
-        <label>
-          Постер (PNG, ≤3 МБ)
-          <input type="file" id="film-poster" accept="image/png" required>
-        </label>
-        <button type="submit" class="btn btn-primary">Добавить фильм</button>
-        <button type="button" id="cancel-add-film" class="btn btn-secondary">Отменить</button>
-      </form>
-    </section>
-
-    <hr class="admin-divider">
-
-    <section class="admin-section">
-      <h2 class="section-title">Управление сеансами</h2>
-      <div id="seances" class="mb-2"></div>
-      <button id="show-add-seance" class="btn btn-success ms-3">Добавить сеанс</button>
-    </section>
-
-    <section id="add-seance-modal" class="modal hidden">
-      <h2>Добавление сеанса</h2>
-      <form id="add-seance-form">
-        <label>
-          Зал
-          <select id="seance-hall" required></select>
-        </label>
-        <label>
-          Фильм
-          <select id="seance-film" required></select>
-        </label>
-        <label>
-          Время начала
-          <input type="time" id="seance-time" required>
-        </label>
-        <button type="submit" class="btn btn-primary">Добавить сеанс</button>
-        <button type="button" id="cancel-add-seance" class="btn btn-secondary">Отменить</button>
-      </form>
-    </section>
-
-    <hr class="admin-divider">
-
-    <section class="admin-section">
-      <h2 class="section-title">Сетка сеансов</h2>
-      <div class="row">
-        <div class="col-12 col-md-3">
-          <div id="dnd-films-list" class="dnd-films-list"></div>
-        </div>
-        <div class="col-12 col-md-9">
-          <div id="dnd-timelines"></div>
-        </div>
-      </div>
-      <div class="d-flex gap-3 px-3 mt-3">
-        <button id="save-timeline" class="btn btn-primary">Сохранить расписание</button>
+      <div class="admin-section__content">
+        <form id="hall-config-form">
+          <div class="form-group">
+            <label>Выберите зал для конфигурации:</label>
+            <select class="form-control" id="hall-config-select">
+              <!-- Здесь будет список залов -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Укажите количество рядов и максимальное количество кресел в ряду:</label>
+            <div class="d-flex gap-3">
+              <input type="number" class="form-control" id="rows-count" placeholder="Ряды" min="1">
+              <input type="number" class="form-control" id="seats-count" placeholder="Места" min="1">
+            </div>
+          </div>
+          <div class="hall-config__grid" id="hall-config-grid">
+            <!-- Здесь будет схема зала -->
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" id="cancel-config">Отмена</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+        </form>
       </div>
     </section>
 
+    <!-- Конфигурация цен -->
     <section class="admin-section">
-      <h2 class="section-title">Открыть продажи</h2>
-      <div class="admin-radio-group px-3" id="open-sale-list"></div>
-      <button id="open-sale-btn" class="btn btn-success admin-open-btn ms-3">Открыть продажи</button>
+      <div class="admin-section__title">
+        <h2>Конфигурация цен</h2>
+      </div>
+      <div class="admin-section__content">
+        <form id="price-config-form">
+          <div class="form-group">
+            <label>Выберите зал для конфигурации:</label>
+            <select class="form-control" id="price-config-select">
+              <!-- Здесь будет список залов -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Установите цены для типов кресел:</label>
+            <div class="d-flex gap-3">
+              <div class="flex-grow-1">
+                <label>Обычные кресла</label>
+                <input type="number" class="form-control" id="standart-price" min="0">
+              </div>
+              <div class="flex-grow-1">
+                <label>VIP кресла</label>
+                <input type="number" class="form-control" id="vip-price" min="0">
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" id="cancel-price">Отмена</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+        </form>
+      </div>
     </section>
 
+    <!-- Сетка сеансов -->
+    <section class="admin-section">
+      <div class="admin-section__title">
+        <h2>Сетка сеансов</h2>
+        <button class="btn btn-primary" id="show-add-seance">Добавить сеанс</button>
+      </div>
+      <div class="admin-section__content">
+        <div id="seances">
+          <!-- Здесь будет сетка сеансов -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Открыть продажи -->
+    <section class="admin-section">
+      <div class="admin-section__title">
+        <h2>Открыть продажи</h2>
+      </div>
+      <div class="admin-section__content">
+        <form id="open-sales-form">
+          <div class="form-group">
+            <label>Выберите зал для открытия продаж:</label>
+            <select class="form-control" id="sales-hall-select">
+              <!-- Здесь будет список залов -->
+            </select>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Открыть продажу билетов</button>
+          </div>
+        </form>
+      </div>
+    </section>
   </main>
+
+  <!-- Модальное окно добавления фильма -->
+  <div class="modal hidden" id="add-film-modal">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h3>Добавление фильма</h3>
+      </div>
+      <form id="add-film-form">
+        <div class="form-group">
+          <label>Название фильма</label>
+          <input type="text" class="form-control" name="film_name" required>
+        </div>
+        <div class="form-group">
+          <label>Продолжительность (в минутах)</label>
+          <input type="number" class="form-control" name="film_duration" required>
+        </div>
+        <div class="form-group">
+          <label>Описание</label>
+          <textarea class="form-control" name="film_description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Страна</label>
+          <input type="text" class="form-control" name="film_origin">
+        </div>
+        <div class="form-group">
+          <label>Постер (URL)</label>
+          <input type="url" class="form-control" name="film_poster">
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn-secondary" id="cancel-add-film">Отмена</button>
+          <button type="submit" class="btn btn-primary">Добавить фильм</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальное окно добавления сеанса -->
+  <div class="modal hidden" id="add-seance-modal">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h3>Добавление сеанса</h3>
+      </div>
+      <form id="add-seance-form">
+        <div class="form-group">
+          <label>Фильм</label>
+          <select class="form-control" id="seance-film" name="seance_filmid" required>
+            <!-- Здесь будет список фильмов -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Зал</label>
+          <select class="form-control" id="seance-hall" name="seance_hallid" required>
+            <!-- Здесь будет список залов -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Время начала</label>
+          <input type="time" class="form-control" name="seance_time" required>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn-secondary" id="cancel-add-seance">Отмена</button>
+          <button type="submit" class="btn btn-primary">Добавить сеанс</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <script src="bundle.js"></script>
 </body>
 </html>
