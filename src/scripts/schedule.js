@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Загрузка расписания для даты:', date);
             scheduleContent.innerHTML = '<div class="schedule__loading">Загрузка расписания...</div>';
             
-            const response = await apiRequest('alldata');
+            const response = await apiRequest('alldata', 'GET', null, false);
             console.log('Получены данные от API:', response);
 
             if (!response || !response.success) {

@@ -4,22 +4,31 @@ const API_BASE = process.env.NODE_ENV === 'production'
 
 /**
  * Выполняет асинхронный запрос к API.
+ * @param {boolean} requireAuth - Нужно ли отправлять credentials (cookie).
  */
-export async function apiRequest(endpoint, method = 'GET', data = null) {
+export async function apiRequest(endpoint, method = 'GET', data = null, requireAuth = true) {
     try {
         const options = {
             method,
-            credentials: 'include'
         };
 
+        if (requireAuth) {
+            options.credentials = 'include';
+        }
+
         if (data) {
-            const formData = new FormData();
-            Object.entries(data).forEach(([key, value]) => {
-                if (value !== null && value !== undefined) {
-                    formData.append(key, value);
-                }
-            });
-            options.body = formData;
+            // Если тело - FormData, просто используем его
+            if (data instanceof FormData) {
+                options.body = data;
+            } else { // Иначе - создаем FormData из объекта
+                const formData = new FormData();
+                Object.entries(data).forEach(([key, value]) => {
+                    if (value !== null && value !== undefined) {
+                        formData.append(key, value);
+                    }
+                });
+                options.body = formData;
+            }
         }
 
         console.log(`Отправка ${method} запроса к ${endpoint}`);
