@@ -11,24 +11,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('login-password').value.trim();
 
             if (!email || !password) {
-                alert('Введите логин и пароль');
-                return;
+                return alert('Введите E-mail и пароль');
             }
 
-            const fd = new FormData();
-            fd.append('login', email);
-            fd.append('password', password);
+            try {
+                const res = await apiRequest('login', 'POST', {
+                    login: email,
+                    password: password
+                });
 
-            const res = await fetch('https://shfe-diplom.neto-server.ru/login', {
-                method: 'POST',
-                body: fd
-            }).then(r => r.json());
-
-            if (res.success) {
-                localStorage.setItem('adminAuth', 'true');
-                window.location.href = 'admin.html';
-            } else {
-                alert('Ошибка авторизации. Проверьте логин и пароль.');
+                if (res.success) {
+                    localStorage.setItem('adminAuth', 'true');
+                    window.location.href = 'admin.html';
+                } else {
+                    alert('Ошибка авторизации. Проверьте логин и пароль.');
+                }
+            } catch (error) {
+                console.error('Ошибка при авторизации:', error);
+                alert('Произошла ошибка при попытке авторизации. Пожалуйста, проверьте подключение к интернету и попробуйте снова.');
             }
         });
     }

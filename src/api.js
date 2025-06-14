@@ -1,12 +1,27 @@
 const API_BASE = 'https://shfe-diplom.neto-server.ru/';
 
+/**
+ * Выполняет асинхронный запрос к API.
+ * @param {string} endpoint - Конечная точка API (например, 'alldata').
+ * @param {string} method - HTTP-метод ('GET', 'POST', 'DELETE', и т.д.).
+ * @param {Object|null} body - Тело запроса для POST.
+ * @returns {Promise<any>} - Результат запроса в случае успеха.
+ * @throws {Error} - Выбрасывает ошибку в случае сбоя сети или ошибки API.
+ */
 export async function apiRequest(endpoint, method = 'GET', body = null) {
     try {
-        const options = { method };
+        const options = {
+            method,
+            credentials: 'include' // НЕОБХОДИМО для отправки cookie авторизации
+        };
 
         if (body) {
             const formData = new FormData();
-            Object.entries(body).forEach(([key, value]) => formData.append(key, value));
+            Object.entries(body).forEach(([key, value]) => {
+                if (value !== null && value !== undefined) {
+                    formData.append(key, value);
+                }
+            });
             options.body = formData;
         }
 

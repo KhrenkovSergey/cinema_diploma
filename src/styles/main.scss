@@ -154,16 +154,22 @@ body {
 }
 
 .hall-item {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    background-color: rgba($white, 0.1);
-    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.1rem;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(99,83,108,0.07);
+    padding: 0.7rem 1.2rem;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .seances-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .seance-item {
@@ -178,14 +184,13 @@ body {
 // Модальные окна
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.25);
     z-index: 1000;
 
     &.hidden {
@@ -193,11 +198,14 @@ body {
     }
 
     &__content {
-        background-color: $white;
-        padding: 2rem;
-        border-radius: 8px;
-        max-width: 500px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 32px rgba(99,83,108,0.18);
+        max-width: 420px;
         width: 100%;
+        padding: 2rem 2rem 1.5rem 2rem;
+        position: relative;
+        z-index: 2;
     }
 }
 
@@ -647,4 +655,295 @@ body {
     color: #dc3545;
     text-align: center;
     margin: 20px 0;
+}
+
+// --- Стили для страницы авторизации ---
+.login-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: url('../assets/1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+}
+
+.login-main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 32px rgba(99,83,108,0.18);
+  width: 100%;
+  max-width: 420px;
+  padding: 0 0 2.5rem 0;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.login-title {
+  background: $secondary-color;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+  padding: 1.2rem 1rem 1rem 1rem;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 0 2rem;
+}
+
+.login-form label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.login-form input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #d9d6de;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.login-btn {
+  margin-top: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(22,166,175,0.08);
+  padding: 0.8rem 0;
+}
+
+// --- Стили для страницы администрирования ---
+.admin-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: url('../assets/1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+}
+
+.admin-header {
+  position: relative;
+  z-index: 2;
+  background: none;
+  padding-top: 32px;
+  margin-bottom: 32px;
+}
+
+.admin-logo-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2em;
+}
+
+.header__logo {
+  display: flex;
+  gap: 5px;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.header__logo-text {
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 700;
+  &--accent {
+    color: $primary-color;
+  }
+}
+
+.admin-subtitle {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  margin-left: 2px;
+  margin-top: -2px;
+  opacity: 0.85;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.admin-section {
+  background: rgba(255,255,255,0.92);
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(99,83,108,0.13);
+  margin-bottom: 36px;
+  padding: 0 0 2.5rem 0;
+  overflow: visible;
+  position: relative;
+}
+
+.admin-section__title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: $secondary-color;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 12px 12px 0 0;
+  padding: 1.1rem 2rem 1.1rem 2.7rem;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.admin-section__icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: $primary-color;
+  margin-right: 1.1rem;
+  box-shadow: 0 0 0 4px #fff, 0 0 0 8px $secondary-color;
+  display: inline-block;
+}
+
+.admin-section__add-btn {
+  margin-left: auto;
+  min-width: 160px;
+}
+
+.admin-section__content {
+  background: rgba(255,255,255,0.92);
+  border-radius: 0 0 12px 12px;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+}
+
+.halls-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.hall-checkbox {
+  accent-color: $primary-color;
+  width: 18px;
+  height: 18px;
+}
+
+// --- Модальное окно ---
+.modal__header--purple {
+  background: $secondary-color;
+  color: #fff;
+  border-radius: 10px 10px 0 0;
+  padding: 1.2rem 2rem 1.2rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal__title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.modal__close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 1.5rem;
+  line-height: 1;
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 2rem 2rem 1.5rem 2rem;
+}
+
+.modal__label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.modal__input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #d9d6de;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.modal__footer {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: flex-start;
+  margin-top: 1.2rem;
+}
+
+.modal__submit {
+  min-width: 180px;
+}
+
+.modal__cancel {
+  min-width: 140px;
+}
+
+.hall-config__grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: #f8f9fa; 
+    border: 1px solid #dee2e6; 
+}
+
+.hall-config__row {
+    display: flex;
+    gap: 5px;
+}
+
+.hall-config__seat {
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #adb5bd;
+}
+
+.hall-config__seat--standart {
+    background-color: #fff;
+}
+.hall-config__seat--vip {
+    background-color: #f5b400; 
+}
+.hall-config__seat--disabled {
+    background-color: #6c757d; 
+    cursor: not-allowed;
 }

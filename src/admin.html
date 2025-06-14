@@ -9,8 +9,17 @@
   <style>
     .modal {
       position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .modal__content {
       background: white;
       padding: 1.5rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -18,6 +27,7 @@
       max-width: 90%;
       width: 400px;
       border-radius: 5px;
+      position: relative;
     }
     .hidden { display: none; }
     .section-title {
@@ -68,14 +78,40 @@
       /* Убрать фон, чтобы не перебивать class="bg-admin" */
       background: none !important;
     }
+    .admin-section__title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .admin-section__left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
   </style>
 </head>
 <body class="admin-page">
+  <div class="admin-bg"></div>
   <header class="admin-header">
     <div class="container">
-      <div class="d-flex justify-content-between align-items-center">
-        <h1>Администрирование</h1>
-        <a href="index.html" class="btn btn-outline-light">Выйти</a>
+      <div class="admin-header-row">
+        <div class="admin-logo-block">
+          <a href="index.html" class="header__logo" style="text-decoration:none;">
+            <span class="header__logo-text">Идём</span>
+            <span class="header__logo-text header__logo-text--accent">в</span>
+            <span class="header__logo-text">кино</span>
+          </a>
+          <div class="admin-subtitle">АДМИНИСТРАТОРСКАЯ</div>
+        </div>
+        <a href="index.html" class="btn btn-outline-light admin-logout-btn">Выйти</a>
       </div>
     </div>
   </header>
@@ -84,12 +120,26 @@
     <!-- Управление залами -->
     <section class="admin-section">
       <div class="admin-section__title">
-        <h2>Управление залами</h2>
-        <button class="btn btn-primary" id="add-hall-btn">Добавить зал</button>
+        <div class="admin-section__left">
+          <span class="admin-section__icon"></span>
+          <span>Управление залами</span>
+        </div>
+        <button class="btn btn-primary admin-section__add-btn" id="add-hall-btn">Создать зал</button>
       </div>
-      <div id="halls" class="hall-list">
-        <!-- Здесь будет список залов -->
+      <div class="admin-section__content">
+        <div class="halls-list" id="halls-list">
+          <!-- Список залов с чекбоксами будет рендериться здесь -->
+        </div>
       </div>
+    </section>
+
+    <!-- Управление фильмами -->
+    <section class="admin-section">
+      <div class="admin-section__title">
+        <h2>Управление фильмами</h2>
+        <button class="btn btn-primary" id="show-add-film">Добавить фильм</button>
+      </div>
+      <div id="films"></div>
     </section>
 
     <!-- Конфигурация залов -->
@@ -112,6 +162,7 @@
               <input type="number" class="form-control" id="seats-count" placeholder="Места" min="1">
             </div>
           </div>
+          <div class="text-center my-3 fw-bold">ЭКРАН</div>
           <div class="hall-config__grid" id="hall-config-grid">
             <!-- Здесь будет схема зала -->
           </div>
@@ -157,17 +208,14 @@
       </div>
     </section>
 
-    <!-- Сетка сеансов -->
+    <!-- Сетка сеансов (timeline) -->
     <section class="admin-section">
       <div class="admin-section__title">
         <h2>Сетка сеансов</h2>
         <button class="btn btn-primary" id="show-add-seance">Добавить сеанс</button>
       </div>
-      <div class="admin-section__content">
-        <div id="seances">
-          <!-- Здесь будет сетка сеансов -->
-        </div>
-      </div>
+      <div id="seances"></div>
+      <div id="timeline" class="timeline-placeholder">(Здесь будет timeline для drag&drop сеансов)</div>
     </section>
 
     <!-- Открыть продажи -->
@@ -200,23 +248,23 @@
       <form id="add-film-form">
         <div class="form-group">
           <label>Название фильма</label>
-          <input type="text" class="form-control" name="film_name" required>
+          <input type="text" class="form-control" name="filmName" required>
         </div>
         <div class="form-group">
           <label>Продолжительность (в минутах)</label>
-          <input type="number" class="form-control" name="film_duration" required>
+          <input type="number" class="form-control" name="filmDuration" required>
         </div>
         <div class="form-group">
           <label>Описание</label>
-          <textarea class="form-control" name="film_description" rows="3"></textarea>
+          <textarea class="form-control" name="filmDescription" rows="3"></textarea>
         </div>
         <div class="form-group">
           <label>Страна</label>
-          <input type="text" class="form-control" name="film_origin">
+          <input type="text" class="form-control" name="filmOrigin">
         </div>
         <div class="form-group">
           <label>Постер (URL)</label>
-          <input type="url" class="form-control" name="film_poster">
+          <input type="url" class="form-control" name="filmPoster">
         </div>
         <div class="modal__footer">
           <button type="button" class="btn btn-secondary" id="cancel-add-film">Отмена</button>
@@ -256,6 +304,23 @@
       </form>
     </div>
   </div>
-  <script src="bundle.js"></script>
+
+  <!-- Модальное окно добавления зала -->
+  <div class="modal hidden" id="add-hall-modal">
+    <div class="modal__content">
+      <div class="modal__header modal__header--purple">
+        <span class="modal__title">ДОБАВЛЕНИЕ ЗАЛА</span>
+        <button class="modal__close" id="close-add-hall" aria-label="Закрыть">&times;</button>
+      </div>
+      <form id="add-hall-form" class="modal__form">
+        <label for="hall-name" class="modal__label">Название зала</label>
+        <input type="text" id="hall-name" name="hallName" class="modal__input" placeholder="Например, «Зал 1»" required>
+        <div class="modal__footer">
+          <button type="submit" class="btn btn-primary modal__submit">Добавить зал</button>
+          <button type="button" class="btn btn-secondary modal__cancel" id="cancel-add-hall">Отменить</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

@@ -4,9 +4,7 @@ export async function apiRequest(endpoint, method = 'GET', data = null) {
     try {
         const options = {
             method,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            }
+            credentials: 'include'
         };
 
         if (data) {
@@ -29,6 +27,6 @@ export async function apiRequest(endpoint, method = 'GET', data = null) {
         return result;
     } catch (error) {
         console.error('API Error:', error);
-        return null;
+        throw error;
     }
 } 

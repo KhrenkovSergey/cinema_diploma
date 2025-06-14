@@ -23,6 +23,9 @@ module.exports = {
         port: 3000,
         open: true,
         historyApiFallback: true,
+        server: {
+            type: 'https'
+        },
     },
     module: {
         rules: [
@@ -39,13 +42,7 @@ module.exports = {
             {
                 test: /\.s?css$/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            esModule: true,
-                            hmr: true,
-                        },
-                    },
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                     'sass-loader',
                 ],
