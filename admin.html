@@ -1,0 +1,89 @@
+<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Администрирование - Идём в кино</title><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles/main.css"><style>.modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .modal__content {
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      z-index: 1000;
+      max-width: 90%;
+      width: 400px;
+      border-radius: 5px;
+      position: relative;
+    }
+    .hidden { display: none; }
+    .section-title {
+      background: #6a5871;
+      color: #fff;
+      padding: 12px 18px;
+      font-size: 20px;
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    section.admin-section {
+      background: rgba(255,255,255,0.92);
+      border-radius: 8px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 12px rgba(106,88,113,0.07);
+      overflow: hidden;
+      padding-bottom: 18px;
+    }
+    hr.admin-divider {
+      border: none;
+      border-top: 2px solid #d9d6de;
+      margin: 36px 0 28px 0;
+    }
+    .admin-radio-group {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin: 14px 0;
+    }
+    .admin-radio {
+      accent-color: #6a5871;
+      width: 18px; height: 18px;
+    }
+    .admin-open-btn {
+      min-width: 180px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .admin-status {
+      font-size: 15px;
+      margin-left: 12px;
+      color: #6a5871;
+      font-weight: 600;
+    }
+    body {
+      /* Убрать фон, чтобы не перебивать class="bg-admin" */
+      background: none !important;
+    }
+    .admin-section__title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .admin-section__left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }</style><script defer="defer" src="/cinema-booking/admin.bundle.js"></script><link href="/cinema-booking/styles/admin.css" rel="stylesheet"></head><body class="admin-page"><div class="admin-bg"></div><header class="admin-header"><div class="container"><div class="admin-header-row"><div class="admin-logo-block"><a href="index.html" class="header__logo" style="text-decoration:none;"><span class="header__logo-text">Идём</span> <span class="header__logo-text header__logo-text--accent">в</span> <span class="header__logo-text">кино</span></a><div class="admin-subtitle">АДМИНИСТРАТОРСКАЯ</div></div><a href="index.html" class="btn btn-outline-light admin-logout-btn">Выйти</a></div></div></header><main class="container"><section class="admin-section"><div class="admin-section__title"><h2>Управление залами</h2></div><div class="admin-section__content"><p class="admin-section__subtitle">Доступные залы:</p><div class="halls-list" id="halls-list"></div><button class="btn btn-primary" id="add-hall-btn">Создать зал</button></div></section><section class="admin-section"><div class="admin-section__title"><h2>Сетка сеансов</h2></div><div class="admin-section__content seance-management-content"><div class="seance-controls"><button class="btn btn-primary" id="add-film-btn">Добавить фильм</button></div><div id="dnd-films-list"></div><hr class="admin-divider"><div class="row"><div class="col-md-12"><p class="admin-section__subtitle">Таймлайны Залов</p><div id="dnd-timelines"></div></div></div></div></section><section class="admin-section"><div class="admin-section__title"><h2>Конфигурация залов</h2></div><div class="admin-section__content"><form id="hall-config-form"><div class="form-group"><label>Выберите зал для конфигурации:</label> <select class="form-control" id="hall-config-select"></select></div><div class="form-group"><label>Укажите количество рядов и максимальное количество кресел в ряду:</label><div class="d-flex gap-3"><input type="number" class="form-control" id="rows-count" placeholder="Ряды" min="1"> <input type="number" class="form-control" id="seats-count" placeholder="Места" min="1"></div></div><div class="text-center my-3 fw-bold">ЭКРАН</div><div class="hall-config__grid" id="hall-config-grid"></div><div class="d-flex justify-content-end gap-2"><button type="button" class="btn btn-secondary" id="cancel-config">Отмена</button> <button type="submit" class="btn btn-primary">Сохранить</button></div></form></div></section><section class="admin-section"><div class="admin-section__title"><h2>Конфигурация цен</h2></div><div class="admin-section__content"><form id="price-config-form"><div class="form-group"><label>Выберите зал для конфигурации:</label> <select class="form-control" id="price-config-select"></select></div><div class="form-group"><label>Установите цены для типов кресел:</label><div class="d-flex gap-3"><div class="flex-grow-1"><label>Обычные кресла</label> <input type="number" class="form-control" id="standart-price" min="0"></div><div class="flex-grow-1"><label>VIP кресла</label> <input type="number" class="form-control" id="vip-price" min="0"></div></div></div><div class="d-flex justify-content-end gap-2"><button type="button" class="btn btn-secondary" id="cancel-price">Отмена</button> <button type="submit" class="btn btn-primary">Сохранить</button></div></form></div></section><section class="admin-section"><div class="admin-section__title"><h2>Открыть продажи</h2></div><div class="admin-section__content"><form id="open-sales-form"><div class="form-group"><label>Выберите зал для открытия продаж:</label> <select class="form-control" id="sales-hall-select"></select></div><div class="d-flex justify-content-end"><button type="submit" class="btn btn-primary">Открыть продажу билетов</button></div></form></div></section></main><div class="modal hidden" id="add-film-modal"><div class="modal__content"><div class="modal__header"><h3 class="modal__title">Добавление фильма</h3><button class="btn-reset modal__close" id="close-add-film-modal">&times;</button></div><div class="modal__body"><form id="add-film-form"><div class="form-group"><label for="film-title-input">Название фильма</label> <input class="form-control" id="film-title-input" placeholder="Например, «Гражданин Кейн»" required></div><div class="form-group"><label for="film-duration-input">Продолжительность фильма (мин.)</label> <input type="number" class="form-control" id="film-duration-input" placeholder="90" required></div><div class="form-group"><label for="film-description-input">Описание фильма</label> <textarea class="form-control" id="film-description-input" rows="3"></textarea></div><div class="form-group"><label for="film-origin-input">Страна</label> <input class="form-control" id="film-origin-input" placeholder="США"></div><div class="form-group"><label for="film-poster-input" class="btn btn-secondary">Загрузить постер</label> <input type="file" id="film-poster-input" accept="image/png" style="display: none;"> <span id="poster-file-name" class="ms-2">Файл не выбран</span></div><div class="modal__footer"><button type="submit" class="btn btn-primary">Добавить фильм</button> <button type="button" class="btn btn-outline-secondary" id="cancel-add-film">Отменить</button></div></form></div></div></div><div class="modal hidden" id="add-seance-modal"><div class="modal__content"><div class="modal__header"><h3>Добавление сеанса</h3></div><form id="add-seance-form"><div class="form-group"><label>Фильм</label> <select class="form-control" id="seance-film" name="seance_filmid" required></select></div><div class="form-group"><label>Зал</label> <select class="form-control" id="seance-hall" name="seance_hallid" required></select></div><div class="form-group"><label>Время начала</label> <input type="time" class="form-control" name="seance_time" required></div><div class="modal__footer"><button type="button" class="btn btn-secondary" id="cancel-add-seance">Отмена</button> <button type="submit" class="btn btn-primary">Добавить сеанс</button></div></form></div></div><div class="modal hidden" id="add-hall-modal"><div class="modal__content"><div class="modal__header modal__header--purple"><span class="modal__title">ДОБАВЛЕНИЕ ЗАЛА</span> <button class="modal__close" id="close-add-hall" aria-label="Закрыть">&times;</button></div><form id="add-hall-form" class="modal__form"><label for="hall-name" class="modal__label">Название зала</label> <input id="hall-name" name="hallName" class="modal__input" placeholder="Например, «Зал 1»" required><div class="modal__footer"><button type="submit" class="btn btn-primary modal__submit">Добавить зал</button> <button type="button" class="btn btn-secondary modal__cancel" id="cancel-add-hall">Отменить</button></div></form></div></div><script src="admin.bundle.js"></script></body></html>
