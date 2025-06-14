@@ -4,4 +4,4 @@
 
 ## Ссылка на опубликованную страницу
 
-[https://just1ne.github.io/cinema-booking/](https://just1ne.github.io/cinema-booking/) 
+[https://khrenkovsergey.github.io/cinema_diploma/](https://khrenkovsergey.github.io/cinema_diploma/) 
