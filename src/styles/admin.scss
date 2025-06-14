@@ -48,28 +48,45 @@
 }
 
 // Управление залами
-.hall-list {
-    display: grid;
-    gap: 1rem;
-
-    .hall-item {
-        background-color: rgba($secondary-color, 0.05);
-        padding: 1rem;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        &__name {
-            font-weight: 500;
-            color: $secondary-color;
-        }
-
-        &__controls {
-            display: flex;
-            gap: 0.5rem;
-        }
+.halls-list {
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 1.5rem;
     }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        font-size: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+}
+
+.btn-reset {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+  outline: none !important;
+  box-shadow: none !important;
+
+  img {
+    border: none !important;
+    outline: none !important;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
 }
 
 // Конфигурация зала
@@ -240,4 +257,232 @@
             background-color: darken(#dc3545, 10%);
         }
     }
+}
+
+.films-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.film-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.film-poster {
+  width: 100px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.film-details {
+  flex-grow: 1;
+}
+
+.film-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+}
+
+.film-duration {
+  margin: 0;
+  color: #6c757d;
+}
+
+.films-list-draggable {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.film-item-draggable {
+  box-sizing: border-box;
+  width: 259px;
+  height: 52px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: grab;
+
+  &__poster {
+    width: 38px;
+    height: 100%; // Займет всю высоту плитки
+    object-fit: cover;
+    border-radius: 2px;
+    pointer-events: none;
+  }
+
+  &__info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    pointer-events: none;
+  }
+  
+  &__title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.2;
+    color: #333;
+  }
+
+  &__duration {
+    font-size: 0.8rem;
+    color: #555;
+    margin: 0;
+  }
+
+  .delete-film-btn {
+      margin-left: auto;
+      align-self: flex-start; // Прижать к верху
+  }
+}
+
+// Убираем старые неработающие стили
+// .seance-management-content .seance-controls, #dnd-films-list, .dnd-film-item ...
+
+// Новые, правильные стили для плитки фильма в сетке Bootstrap
+.dnd-film-item {
+  display: flex;
+  align-items: center;
+  width: 100%; // Занимает всю ширину колонки (col-md-4)
+  height: 64px; // Фиксированная высота для единообразия
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.2);
+  cursor: grab;
+  gap: 10px;
+}
+
+.dnd-film-item__poster {
+  width: 38px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dnd-film-item__info {
+  flex-grow: 1;
+  min-width: 0; // Важно для правильного переноса текста
+  color: #333;
+}
+
+.dnd-film-item__title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.dnd-film-item__duration {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.dnd-film-item .delete-film-btn {
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+// DND Сетка сеансов
+.dnd-hall-block {
+  margin-bottom: 2rem;
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+}
+
+.dnd-timeline {
+  position: relative;
+  height: 80px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  background-image: linear-gradient(to right, #e0e0e0 1px, transparent 1px);
+  background-size: calc(100% / 24) 100%;
+}
+
+.dnd-seance {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: #333;
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+
+  &__title {
+    font-size: 0.9em;
+    font-weight: 500;
+    white-space: nowrap;
+    margin: 0;
+  }
+  &__time {
+    font-size: 0.8em;
+    margin: 0;
+  }
+  &__delete {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.2em;
+    line-height: 1;
+  }
+}
+
+// Переопределяем стили для сетки фильмов с высокой специфичностью
+.seance-management-content #dnd-films-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 15px !important;
+}
+
+.dnd-film-item {
+  box-sizing: border-box !important;
+  width: 259px !important;
+  height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(0, 0, 0, 0.3) !important;
+  cursor: grab !important;
+  
+  .dnd-film-item__poster {
+    width: 38px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+  &__info {
+    flex-grow: 1;
+    font-size: 0.9rem;
+  }
+  .delete-film-btn {
+      margin-left: auto;
+      align-self: flex-start;
+  }
 } 

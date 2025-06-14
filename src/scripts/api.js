@@ -16,7 +16,7 @@ export async function apiRequest(endpoint, method = 'GET', data = null) {
         }
 
         console.log(`Отправка ${method} запроса к ${endpoint}`);
-        const response = await fetch(`${API_URL}/${endpoint}`, options);
+        const response = await fetch(`/api/${endpoint}`, options);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
