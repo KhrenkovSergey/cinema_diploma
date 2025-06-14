@@ -166,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 addHallForm.reset();
                 await loadAllData();
             } else {
-                alert(result.error || 'Произошла неизвестная ошибка.');
+                const errorMessage = result ? result.error : 'Произошла неизвестная ошибка. Возможно, проблема с сетью.';
+                alert(errorMessage);
             }
         });
     }
@@ -183,7 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (result && result.success) {
                         await loadAllData();
                     } else {
-                        alert(result.error || 'Не удалось удалить зал.');
+                        const errorMessage = result ? result.error : 'Не удалось удалить зал.';
+                        alert(errorMessage);
                     }
                 }
             }
@@ -231,7 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 posterFileNameSpan.textContent = 'Файл не выбран';
                 await loadAllData();
             } else {
-                alert(result.error || 'Произошла ошибка при добавлении фильма.');
+                const errorMessage = result ? result.error : 'Произошла ошибка при добавлении фильма.';
+                alert(errorMessage);
             }
         });
     }
@@ -560,7 +563,8 @@ document.addEventListener('DOMContentLoaded', () => {
                      if(result && result.success) {
                          await loadAllData();
                      } else {
-                         alert(result.error || 'Не удалось удалить сеанс.');
+                         const errorMessage = result ? result.error : 'Не удалось удалить сеанс.';
+                         alert(errorMessage);
                      }
                  }
             }

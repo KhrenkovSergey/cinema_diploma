@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
             scheduleContent.innerHTML = '<div class="schedule__loading">Загрузка расписания...</div>';
             
             const response = await apiRequest('alldata', 'GET', null, false);
-            console.log('Получены данные от API:', response);
-
-            if (!response || !response.success) {
+            
+            if (!response) {
                 throw new Error('Не удалось загрузить данные');
             }
-
+            
+            // Извлекаем данные из свойства result
             const data = response.result;
             if (!data || !data.films || !data.seances || !data.halls) {
                 throw new Error('Некорректные данные от сервера');
