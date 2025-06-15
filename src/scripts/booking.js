@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let hallConfig = [];
 
     try {
-        const response = await apiRequest('alldata');
-        const configResponse = await apiRequest(`hallconfig?seanceId=${seanceId}&date=${date}`);
+        const response = await apiRequest('alldata', 'GET', null, false);
+        const configResponse = await apiRequest(`hallconfig?seanceId=${seanceId}&date=${date}`, 'GET', null, false);
         
         if (!response.success || !configResponse.success) {
             throw new Error("Не удалось загрузить данные о сеансе или конфигурацию зала");
