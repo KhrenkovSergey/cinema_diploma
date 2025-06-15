@@ -28,9 +28,7 @@ module.exports = (env, argv) => {
             port: 3000,
             open: true,
             historyApiFallback: true,
-            server: {
-                type: 'https'
-            },
+            allowedHosts: 'all',
             proxy: [
                 {
                     context: ['/api'],

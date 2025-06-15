@@ -12,16 +12,24 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
     try {
         const options = {
             method,
-            credentials: 'include' // НЕОБХОДИМО для отправки cookie авторизации
+            headers: {} // Добавляем объект headers
         };
 
+        // Добавляем токен авторизации для всех запросов, кроме логина
+        if (endpoint !== 'login') {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                options.headers['Authorization'] = `Bearer ${token}`;
+            }
+        }
+        
         if (body) {
-            // Если тело запроса уже является объектом FormData (например, при загрузке файла),
-            // используем его напрямую. В противном случае, создаем новый объект FormData
-            // из переданного объекта.
+            // Если тело - FormData, оставляем как есть.
             if (body instanceof FormData) {
                 options.body = body;
-            } else {
+            } else { 
+                // В остальных случаях, если это не FormData, превращаем объект в FormData.
+                // Это нужно для совместимости с текущим API, которое ожидает multipart/form-data.
                 const formData = new FormData();
                 Object.entries(body).forEach(([key, value]) => {
                     if (value !== null && value !== undefined) {
@@ -34,18 +42,21 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
 
         const response = await fetch(`${API_BASE}${endpoint}`, options);
         
-        // Попытка получить JSON даже при ошибке, чтобы извлечь сообщение
         const data = await response.json().catch(() => null);
 
         if (!response.ok || (data && !data.success)) {
             const errorMessage = (data && data.error) ? data.error : `HTTP ошибка! Статус: ${response.status}`;
             throw new Error(errorMessage);
         }
+        
+        // Сохраняем токен после успешного логина
+        if (endpoint === 'login' && data.result.token) {
+            localStorage.setItem('authToken', data.result.token);
+        }
 
         return data.result;
     } catch (error) {
         console.error(`API Error on endpoint '${endpoint}': ${error.message}`);
-        // Пробрасываем ошибку дальше, чтобы ее можно было поймать в вызывающем коде
         throw error;
     }
 }

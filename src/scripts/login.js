@@ -4,39 +4,26 @@ import { apiRequest } from './api';
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
-    if (!loginForm) return;
+    if (loginForm) {
+        loginForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const emailInput = document.getElementById('login-email');
+            const passwordInput = document.getElementById('login-password');
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
 
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value.trim();
+            if (!email || !password) {
+                return alert('Введите E-mail и пароль');
+            }
 
-        if (!email || !password) {
-            return alert('Пожалуйста, введите E-mail и пароль.');
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('login', email);
-            formData.append('password', password);
-            
-            // Используем нашу централизованную функцию
-            // requireAuth = true здесь нужен, так как это запрос на авторизацию
-            const result = await apiRequest('login', 'POST', formData, true);
-
-            // `apiRequest` возвращает null при ошибке, и объект с данными при успехе.
-            // Для успешного логина, сервер возвращает непустой ответ, поэтому result не будет null.
-            if (result) {
+            try {
+                // Используем нашу обертку apiRequest
+                await apiRequest('login', 'POST', { email, password });
                 localStorage.setItem('adminAuth', 'true');
                 window.location.href = 'admin.html';
-            } else {
-                const errorMessage = 'Произошла ошибка при попытке авторизации. Пожалуйста, проверьте подключение к интернету и попробуйте снова.';
-                alert(errorMessage);
+            } catch (error) {
+                alert(error.message || 'Ошибка авторизации. Проверьте логин и пароль.');
             }
-        } catch (error) {
-            console.error('Ошибка при авторизации:', error);
-            // Покажем пользователю ошибку, которую вернул сервер
-            alert(error.message || 'Произошла критическая ошибка. Пожалуйста, проверьте консоль.');
-        }
-    });
+        });
+    }
 }); 
