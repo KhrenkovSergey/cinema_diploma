@@ -20,23 +20,26 @@
     <main class="container">
         <section class="ticket-section">
             <header class="ticket-section__header">
-                <h2 class="ticket-section__title">Электронный билет</h2>
+                <h2 class="ticket-section__title">ВЫ ВЫБРАЛИ БИЛЕТЫ:</h2>
             </header>
+            <div class="ticket-divider"></div>
             <div class="ticket-section__info-wrapper">
                 <p class="ticket-section__info">На фильм: <span class="ticket-section__details" id="ticket-film-title"></span></p>
                 <p class="ticket-section__info">Места: <span class="ticket-section__details" id="ticket-seats"></span></p>
                 <p class="ticket-section__info">В зале: <span class="ticket-section__details" id="ticket-hall-name"></span></p>
                 <p class="ticket-section__info">Начало сеанса: <span class="ticket-section__details" id="ticket-start-time"></span></p>
-                <p class="ticket-section__info">Дата: <span class="ticket-section__details" id="ticket-date"></span></p>
+                <p class="ticket-section__info">Стоимость: <span class="ticket-section__details" id="ticket-total-cost"></span></p>
+                <button class="btn btn-primary" id="get-booking-code-btn">ПОЛУЧИТЬ КОД БРОНИРОВАНИЯ</button>
 
-                <div class="ticket-section__qr-code" id="qr-code-container"></div>
+                <canvas class="ticket-section__qr-code hidden" id="qr-code-container"></canvas>
 
-                <p class="ticket-section__hint">
-                    Покажите QR-код нашему контроллеру для подтверждения бронирования.
+                <p class="ticket-section__hint" id="ticket-hint-text">
+                    После оплаты билет будет доступен в этом окне, а также придёт вам на почту. Покажите QR-код нашему контроллёру у входа в зал.
                 </p>
                 <p class="ticket-section__hint">Приятного просмотра!</p>
             </div>
         </section>
     </main>
+    <script src="ticket.bundle.js"></script>
 </body>
 </html> 

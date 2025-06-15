@@ -5,24 +5,25 @@ const API_BASE = 'https://shfe-diplom.neto-server.ru/';
  * @param {string} endpoint - Конечная точка API (например, 'alldata').
  * @param {string} method - HTTP-метод ('GET', 'POST', 'DELETE', и т.д.).
  * @param {Object|null} body - Тело запроса для POST.
+ * @param {boolean} authenticated - Требуется ли аутентификация для этого запроса.
  * @returns {Promise<any>} - Результат запроса в случае успеха.
  * @throws {Error} - Выбрасывает ошибку в случае сбоя сети или ошибки API.
  */
-export async function apiRequest(endpoint, method = 'GET', body = null) {
+export async function apiRequest(endpoint, method = 'GET', body = null, authenticated = false) {
     try {
         const options = {
             method,
             headers: {} // Добавляем объект headers
         };
 
-        // Добавляем токен авторизации для всех запросов, кроме логина
-        if (endpoint !== 'login') {
+        // Добавляем токен авторизации только если запрос требует аутентификации
+        if (authenticated) {
             const token = localStorage.getItem('authToken');
             if (token) {
                 options.headers['Authorization'] = `Bearer ${token}`;
             }
         }
-        
+
         if (body) {
             // Если тело - FormData, оставляем как есть.
             if (body instanceof FormData) {
@@ -30,13 +31,13 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
             } else { 
                 // В остальных случаях, если это не FormData, превращаем объект в FormData.
                 // Это нужно для совместимости с текущим API, которое ожидает multipart/form-data.
-                const formData = new FormData();
-                Object.entries(body).forEach(([key, value]) => {
-                    if (value !== null && value !== undefined) {
-                        formData.append(key, value);
-                    }
-                });
-                options.body = formData;
+            const formData = new FormData();
+            Object.entries(body).forEach(([key, value]) => {
+                if (value !== null && value !== undefined) {
+                    formData.append(key, value);
+                }
+            });
+            options.body = formData;
             }
         }
 
@@ -48,7 +49,7 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
             const errorMessage = (data && data.error) ? data.error : `HTTP ошибка! Статус: ${response.status}`;
             throw new Error(errorMessage);
         }
-        
+
         // Сохраняем токен после успешного логина
         if (endpoint === 'login' && data.result.token) {
             localStorage.setItem('authToken', data.result.token);

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!response.success || !configResponse.success) {
             throw new Error("Не удалось загрузить данные о сеансе или конфигурацию зала");
         }
-        
+
         const allData = response.result; 
         hallConfig = configResponse.result;
 
@@ -59,12 +59,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderBookingInfo() {
         if (!bookingInfoContainer) return;
         bookingInfoContainer.innerHTML = `
-            <div class="booking-info__poster">
+                <div class="booking-info__poster">
                 <img src="${filmData.film_poster}" alt="Постер фильма ${filmData.film_name}">
-            </div>
-            <div class="booking-info__details">
+                </div>
+                <div class="booking-info__details">
                 <h2 class="booking-info__title">${filmData.film_name}</h2>
-                <div class="booking-info__session">
+                    <div class="booking-info__session">
                     <p><strong>Начало:</strong> ${seanceData.seance_time}</p>
                     <p><strong>Зал:</strong> ${hallData.hall_name}</p>
                     <p><strong>Дата:</strong> ${new Date(date).toLocaleDateString('ru-RU')}</p>
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="hall-legend__item">
                 <div class="seat seat--taken"></div> <span class="hall-legend__text">— Занято</span>
             </div>
-             <div class="hall-legend__item">
+            <div class="hall-legend__item">
                 <div class="seat seat--selected"></div> <span class="hall-legend__text">— Выбрано</span>
             </div>
         `;
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 row: seat.dataset.row,
                 place: seat.dataset.place,
                 coast: seat.dataset.type === 'vip' ? hallData.hall_price_vip : hallData.hall_price_standart
-            }));
+                }));
 
             const totalCost = tickets.reduce((sum, ticket) => sum + Number(ticket.coast), 0);
 

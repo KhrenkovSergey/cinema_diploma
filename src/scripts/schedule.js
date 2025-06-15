@@ -13,16 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для получения дней недели
     function getDayName(date) {
+        // Перемапливаем результат getDay(): 0=Пн, 1=Вт, ..., 6=Вс
+        const remappedDay = (date.getDay() + 6) % 7; 
         const days = {
-            'Mon': 'Пн',
-            'Tue': 'Вт',
-            'Wed': 'Ср',
-            'Thu': 'Чт',
-            'Fri': 'Пт',
-            'Sat': 'Сб',
-            'Sun': 'Вс'
+            0: 'Пн',
+            1: 'Вт',
+            2: 'Ср',
+            3: 'Чт',
+            4: 'Пт',
+            5: 'Сб',
+            6: 'Вс'
         };
-        return days[date.toLocaleString('en', { weekday: 'short' })];
+        return days[remappedDay];
     }
 
     let currentStartDate = new Date();
@@ -30,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для загрузки расписания
     async function loadSchedule(date) {
         try {
-            console.log('Загрузка расписания для даты:', date);
             scheduleContent.innerHTML = '<div class="schedule__loading">Загрузка расписания...</div>';
             
             const response = await apiRequest('alldata');
@@ -44,14 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Некорректные данные от сервера');
             }
 
-            console.log('Фильмы:', data.films);
-            console.log('Сеансы:', data.seances);
-            console.log('Залы:', data.halls);
-
             // Фильтруем сеансы по выбранной дате
             // В данном случае нам не нужно фильтровать по дате, так как все сеансы относятся к выбранной дате
             const filteredSeances = data.seances;
-            console.log('Отфильтрованные сеансы:', filteredSeances);
 
             if (filteredSeances.length === 0) {
                 scheduleContent.innerHTML = '<div class="schedule__empty">На выбранную дату сеансов нет</div>';
@@ -62,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const movieSessions = {};
             filteredSeances.forEach(seance => {
                 const movie = data.films.find(f => f.id === seance.seance_filmid);
-                console.log('Поиск фильма:', { seance, movie });
                 
                 if (!movie) return;
 
@@ -77,8 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     hall: data.halls.find(h => h.id === seance.seance_hallid)
                 });
             });
-
-            console.log('Сгруппированные сеансы по фильмам:', movieSessions);
 
             // Отображаем фильмы
             scheduleContent.innerHTML = Object.values(movieSessions)
@@ -142,8 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return dates.map((date, index) => {
             const isToday = date.toDateString() === new Date().toDateString();
+            // Используем перемапленный день для проверки выходных
+            const remappedDay = (date.getDay() + 6) % 7;
+            const isWeekend = remappedDay === 5 || remappedDay === 6; // 5 = суббота, 6 = воскресенье
             return `
-                <div class="schedule__date${index === 0 ? ' schedule__date--active' : ''}" data-date="${formatDate(date)}">
+                <div class="schedule__date${index === 0 ? ' schedule__date--active' : ''}${isWeekend ? ' schedule__date--weekend' : ''}" data-date="${formatDate(date)}">
                     <div class="schedule__date-day">${isToday ? 'Сегодня' : getDayName(date)}</div>
                     <div class="schedule__date-number">${date.getDate()}</div>
                 </div>

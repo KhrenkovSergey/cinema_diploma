@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Используем нашу обертку apiRequest
                 await apiRequest('login', 'POST', { email, password });
-                localStorage.setItem('adminAuth', 'true');
-                window.location.href = 'admin.html';
+                    localStorage.setItem('adminAuth', 'true');
+                    window.location.href = 'admin.html';
             } catch (error) {
                 alert(error.message || 'Ошибка авторизации. Проверьте логин и пароль.');
             }

@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function populateHallSelects() {
-        const selects = [hallConfigSelect, priceConfigSelect, salesHallSelect, document.getElementById('seance-hall')];
+        const selects = [hallConfigSelect, priceConfigSelect, salesHallSelect];
         selects.forEach(select => {
             if (select) {
                 const selectedValue = select.value;
@@ -143,15 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DATA LOADING ---
     async function loadAllData() {
         try {
-            const response = await apiRequest('alldata');
+            const response = await apiRequest('alldata', 'GET', null, true);
             if (response && response.success) {
                 const data = response.result;
-                halls = data.halls || [];
-                films = data.films || [];
-                seances = data.seances || [];
-                renderAll();
+            halls = data.halls || [];
+            films = data.films || [];
+            seances = data.seances || [];
+                renderHalls();
                 renderSeanceGrid();
-            } else {
+        } else {
                 throw new Error('Не удалось получить данные с сервера');
             }
         } catch (error) {
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!hallName) return alert('Название зала не может быть пустым.');
             
             try {
-                await apiRequest('hall', 'POST', { hallName });
+                await apiRequest('hall', 'POST', { hallName }, true);
                 addHallModal.classList.add('hidden');
                 addHallForm.reset();
                 await loadAllData();
@@ -187,13 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Удаление зала
     if (hallsList) {
         hallsList.addEventListener('click', async (e) => {
+            e.stopImmediatePropagation();
             const deleteBtn = e.target.closest('.delete-hall-btn');
             if (deleteBtn) {
                 e.preventDefault();
                 const hallId = deleteBtn.dataset.hallId;
                 if (confirm('Вы уверены, что хотите удалить этот зал? Это действие необратимо.')) {
                     try {
-                        await apiRequest(`hall/${hallId}`, 'DELETE');
+                        await apiRequest(`hall/${hallId}`, 'DELETE', null, true);
                         await loadAllData();
                     } catch (error) {
                         alert(error.message || 'Не удалось удалить зал.');
@@ -237,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                await apiRequest('film', 'POST', formData);
+                await apiRequest('film', 'POST', formData, true);
                 addFilmModal.classList.add('hidden');
                 addFilmForm.reset();
                 posterFileNameSpan.textContent = 'Файл не выбран';
@@ -329,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                await apiRequest(`hall/${selectedHallForConfig.id}`, 'POST', params);
+                await apiRequest(`hall/${selectedHallForConfig.id}`, 'POST', params, true);
                 alert('Конфигурация зала успешно сохранена!');
                 await loadAllData();
             } catch (error) {
@@ -361,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                await apiRequest(`price/${selectedHallForPricing.id}`, 'POST', params);
+                await apiRequest(`price/${selectedHallForPricing.id}`, 'POST', params, true);
                 alert('Цены успешно сохранены!');
                 await loadAllData();
             } catch (error) {
@@ -403,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                await apiRequest(`open/${selectedHallForSales.id}`, 'POST', params);
+                await apiRequest(`open/${selectedHallForSales.id}`, 'POST', params, true);
                 alert('Статус продаж успешно изменен!');
                 await loadAllData();
             } catch (error) {
@@ -534,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dndFilmsList) {
         // Начало перетаскивания фильма
         dndFilmsList.addEventListener('dragstart', e => {
+            e.stopImmediatePropagation();
             if (e.target.classList.contains('dnd-film-item')) {
                 draggedElement = e.target;
             }
@@ -541,13 +543,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Удаление фильма
         dndFilmsList.addEventListener('click', async (e) => {
+            e.stopImmediatePropagation();
             const deleteBtn = e.target.closest('.delete-film-btn');
             if (deleteBtn) {
                 e.preventDefault();
                 const filmId = deleteBtn.dataset.filmId;
                 if (confirm('Вы уверены, что хотите удалить этот фильм? Все сеансы с этим фильмом также будут удалены.')) {
                     try {
-                        await apiRequest(`film/${filmId}`, 'DELETE');
+                        await apiRequest(`film/${filmId}`, 'DELETE', null, true);
                         await loadAllData();
                     } catch (error) {
                         alert(error.message || 'Не удалось удалить фильм.');
@@ -560,6 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dndTimelines) {
         // Начало перетаскивания сеанса
         dndTimelines.addEventListener('dragstart', e => {
+            e.stopImmediatePropagation();
             if (e.target.classList.contains('dnd-seance')) {
                 draggedElement = e.target;
             }
@@ -592,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         seanceHallid: hallId,
                         seanceFilmid: filmId,
                         seanceTime: seanceTime
-                    });
+                    }, true);
                     await loadAllData(); 
                 } catch (error) {
                     alert(error.message || 'Ошибка добавления сеанса');
@@ -603,12 +607,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Удаление сеанса
         dndTimelines.addEventListener('click', async (e) => {
+            e.stopImmediatePropagation();
             const deleteBtn = e.target.closest('.dnd-seance__delete');
             if(deleteBtn) {
                 const seanceId = deleteBtn.dataset.seanceId;
                  if (confirm('Удалить этот этот сеанс?')) {
                      try {
-                        await apiRequest(`seance/${seanceId}`, 'DELETE');
+                        await apiRequest(`seance/${seanceId}`, 'DELETE', null, true);
                         await loadAllData();
                      } catch (error) {
                         alert(error.message || 'Не удалось удалить сеанс.');

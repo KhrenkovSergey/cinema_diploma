@@ -6,111 +6,22 @@
   <title>Администрирование - Идём в кино</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/main.css">
-  <style>
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-    }
-    .modal__content {
-      background: white;
-      padding: 1.5rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      z-index: 1000;
-      max-width: 90%;
-      width: 400px;
-      border-radius: 5px;
-      position: relative;
-    }
-    .hidden { display: none; }
-    .section-title {
-      background: #6a5871;
-      color: #fff;
-      padding: 12px 18px;
-      font-size: 20px;
-      border-radius: 8px 8px 0 0;
-      margin-bottom: 0;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-    section.admin-section {
-      background: rgba(255,255,255,0.92);
-      border-radius: 8px;
-      margin-bottom: 32px;
-      box-shadow: 0 2px 12px rgba(106,88,113,0.07);
-      overflow: hidden;
-      padding-bottom: 18px;
-    }
-    hr.admin-divider {
-      border: none;
-      border-top: 2px solid #d9d6de;
-      margin: 36px 0 28px 0;
-    }
-    .admin-radio-group {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-      margin: 14px 0;
-    }
-    .admin-radio {
-      accent-color: #6a5871;
-      width: 18px; height: 18px;
-    }
-    .admin-open-btn {
-      min-width: 180px;
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .admin-status {
-      font-size: 15px;
-      margin-left: 12px;
-      color: #6a5871;
-      font-weight: 600;
-    }
-    body {
-      /* Убрать фон, чтобы не перебивать class="bg-admin" */
-      background: none !important;
-    }
-    .admin-section__title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-    .admin-section__left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .admin-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-  </style>
 </head>
 <body class="admin-page">
   <div class="admin-bg"></div>
-  <header class="admin-header container">
-    <div class="admin-header-row">
-      <div class="admin-logo-block">
-        <a href="index.html" class="header__logo" style="text-decoration:none;">
-          <span class="header__logo-text">Идём</span>
-          <span class="header__logo-text header__logo-text--accent">в</span>
-          <span class="header__logo-text">кино</span>
-        </a>
-        <div class="admin-subtitle">АДМИНИСТРАТОРСКАЯ</div>
+  <header class="admin-header">
+    <div class="container">
+      <div class="admin-header-row">
+        <div class="admin-logo-block">
+          <a href="index.html" class="header__logo" style="text-decoration:none;">
+            <span class="header__logo-text">Идём</span>
+            <span class="header__logo-text header__logo-text--accent">в</span>
+            <span class="header__logo-text">кино</span>
+          </a>
+          <div class="admin-subtitle">АДМИНИСТРАТОРСКАЯ</div>
+        </div>
+        <a href="index.html" class="btn btn-outline-light admin-logout-btn">Выйти</a>
       </div>
-      <a href="index.html" class="btn btn-outline-light admin-logout-btn">Выйти</a>
     </div>
   </header>
 
@@ -178,7 +89,6 @@
             <!-- Здесь будет схема зала -->
           </div>
           <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn btn-secondary" id="cancel-config">Отмена</button>
             <button type="submit" class="btn btn-primary">Сохранить</button>
           </div>
         </form>
@@ -212,7 +122,6 @@
             </div>
           </div>
           <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn btn-secondary" id="cancel-price">Отмена</button>
             <button type="submit" class="btn btn-primary">Сохранить</button>
           </div>
         </form>
@@ -243,39 +152,38 @@
   <!-- Модальное окно добавления фильма -->
   <div class="modal hidden" id="add-film-modal">
     <div class="modal__content">
-      <div class="modal__header">
-        <h3 class="modal__title">Добавление фильма</h3>
+      <div class="modal__header modal__header--purple">
+        <span class="modal__title">ДОБАВЛЕНИЕ ФИЛЬМА</span>
         <button class="btn-reset modal__close" id="close-add-film-modal">&times;</button>
       </div>
-      <div class="modal__body">
-      <form id="add-film-form">
+      <form id="add-film-form" class="modal__form">
         <div class="form-group">
-            <label for="film-title-input">Название фильма</label>
-            <input type="text" class="form-control" id="film-title-input" placeholder="Например, «Гражданин Кейн»" required>
+            <label for="film-title-input" class="modal__label">Название фильма</label>
+            <input type="text" class="form-control modal__input" id="film-title-input" placeholder="Например, «Гражданин Кейн»" required>
         </div>
         <div class="form-group">
-            <label for="film-duration-input">Продолжительность фильма (мин.)</label>
-            <input type="number" class="form-control" id="film-duration-input" placeholder="90" required>
+            <label for="film-duration-input" class="modal__label">Продолжительность фильма (мин.)</label>
+            <input type="number" class="form-control modal__input" id="film-duration-input" placeholder="90" required>
         </div>
         <div class="form-group">
-            <label for="film-description-input">Описание фильма</label>
-            <textarea class="form-control" id="film-description-input" rows="3"></textarea>
+            <label for="film-description-input" class="modal__label">Описание фильма</label>
+            <textarea class="form-control modal__input" id="film-description-input" rows="3"></textarea>
         </div>
         <div class="form-group">
-            <label for="film-origin-input">Страна</label>
-            <input type="text" class="form-control" id="film-origin-input" placeholder="США">
+            <label for="film-origin-input" class="modal__label">Страна</label>
+            <input type="text" class="form-control modal__input" id="film-origin-input" placeholder="США">
         </div>
         <div class="form-group">
+              <label class="modal__label">Постер</label>
               <label for="film-poster-input" class="btn btn-secondary">Загрузить постер</label>
-              <input type="file" id="film-poster-input" accept="image/png" style="display: none;">
+              <input type="file" id="film-poster-input" accept="image/png, image/jpeg" style="display: none;">
               <span id="poster-file-name" class="ms-2">Файл не выбран</span>
         </div>
         <div class="modal__footer">
-          <button type="submit" class="btn btn-primary">Добавить фильм</button>
-            <button type="button" class="btn btn-outline-secondary" id="cancel-add-film">Отменить</button>
+          <button type="submit" class="btn btn-primary modal__submit">Добавить фильм</button>
+          <button type="button" class="btn btn-secondary modal__cancel" id="cancel-add-film">Отменить</button>
         </div>
       </form>
-      </div>
     </div>
   </div>
 

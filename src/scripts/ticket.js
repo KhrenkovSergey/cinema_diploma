@@ -3,42 +3,45 @@ import '../styles/main.scss';
 import QRCode from 'qrcode';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const storedTicketData = localStorage.getItem('lastBookedTicket');
-    if (!storedTicketData) {
-        document.querySelector('.ticket-section').innerHTML = `
-            <h2 class="ticket-section__title">Информация о билете не найдена</h2>
-            <p>Возможно, вы зашли на эту страницу напрямую. Пожалуйста, вернитесь на <a href="index.html">главную</a>, чтобы забронировать билет.</p>
-        `;
+    const ticketData = JSON.parse(localStorage.getItem('lastBookedTicket'));
+
+    if (!ticketData) {
+        console.error('No ticket data found in localStorage.');
+        // Возможно, перенаправить пользователя на главную страницу или показать сообщение об ошибке
         return;
     }
 
-    const ticketData = JSON.parse(storedTicketData);
-    
-    // Заполняем информацию о билете
-    document.getElementById('ticket-film-title').textContent = ticketData.filmName;
-    document.getElementById('ticket-hall-name').textContent = ticketData.hallName;
-    document.getElementById('ticket-start-time').textContent = ticketData.seanceTime;
-    document.getElementById('ticket-date').textContent = new Date(ticketData.date).toLocaleDateString('ru-RU');
-    document.getElementById('ticket-seats').textContent = ticketData.seats.map(s => `${s.row}/${s.place}`).join(', ');
+    const filmTitleSpan = document.getElementById('ticket-film-title');
+    const seatsSpan = document.getElementById('ticket-seats');
+    const hallNameSpan = document.getElementById('ticket-hall-name');
+    const startTimeSpan = document.getElementById('ticket-start-time');
+    const totalCostSpan = document.getElementById('ticket-total-cost');
+    const qrCodeContainer = document.getElementById('qr-code-container');
+    const getBookingCodeBtn = document.getElementById('get-booking-code-btn');
+    const ticketHintText = document.getElementById('ticket-hint-text');
 
-    // Формируем строку для QR-кода
-    const qrString = `
-Билет действителен строго на свой сеанс
-Фильм: ${ticketData.filmName}
-Зал: ${ticketData.hallName}
-Ряд/Место: ${ticketData.seats.map(s => `${s.row}/${s.place}`).join(', ')}
-Дата: ${new Date(ticketData.date).toLocaleDateString('ru-RU')}
-Начало: ${ticketData.seanceTime}
-Стоимость: ${ticketData.totalCost} руб.
-    `.trim();
+    // Изначально скрываем QR-код
+    qrCodeContainer.style.display = 'none';
 
-    // Генерируем QR-код
-    const qrContainer = document.getElementById('qr-code-container');
-    QRCode.toCanvas(qrContainer, qrString, { width: 250 }, (error) => {
-        if (error) console.error(error);
-        console.log('QR-код успешно сгенерирован!');
+    filmTitleSpan.textContent = ticketData.filmName;
+    seatsSpan.textContent = ticketData.seats.map(s => `${s.row}/${s.place}`).join(', ');
+    hallNameSpan.textContent = ticketData.hallName;
+    startTimeSpan.textContent = ticketData.seanceTime;
+    totalCostSpan.textContent = `${ticketData.totalCost} рублей`;
+
+    getBookingCodeBtn.addEventListener('click', async () => {
+        // Генерируем QR-код только при нажатии на кнопку
+        const qrData = `Фильм: ${ticketData.filmName}, Зал: ${ticketData.hallName}, Сеанс: ${ticketData.seanceTime}, Места: ${ticketData.seats.map(s => `${s.row}/${s.place}`).join(', ')}, Стоимость: ${ticketData.totalCost} рублей`;
+        try {
+            // Очищаем контейнер перед генерацией
+            qrCodeContainer.innerHTML = '';
+            await QRCode.toCanvas(qrCodeContainer, qrData);
+            qrCodeContainer.style.display = 'block'; // Показываем QR-код
+            getBookingCodeBtn.style.display = 'none'; // Скрываем кнопку после генерации
+            ticketHintText.textContent = 'Покажите QR-код нашему контроллеру для подтверждения бронирования.';
+        } catch (err) {
+            console.error('Ошибка при генерации QR-кода', err);
+            alert('Не удалось сгенерировать QR-код.');
+        }
     });
-
-    // Очищаем данные после использования
-    localStorage.removeItem('lastBookedTicket');
 }); 

@@ -64,9 +64,9 @@
     margin-bottom: 1.5rem;
 }
 
-.hall-item {
-    display: flex;
-    align-items: center;
+    .hall-item {
+        display: flex;
+        align-items: center;
     gap: 1rem;
     font-size: 1.1rem;
     background: #fff;
@@ -74,7 +74,7 @@
     box-shadow: 0 2px 8px rgba(99,83,108,0.07);
     padding: 0.7rem 1.2rem;
     width: 100%;
-    justify-content: space-between;
+        justify-content: space-between;
 }
 
 .btn-reset {
@@ -88,13 +88,13 @@
   img {
     border: none !important;
     outline: none !important;
-  }
+        }
 
   &:focus,
   &:focus-visible {
     outline: none !important;
     box-shadow: none !important;
-  }
+    }
 }
 
 // Конфигурация зала
@@ -538,5 +538,5 @@
   .delete-film-btn {
       margin-left: auto;
       align-self: flex-start;
-  }
+    }
 } 
