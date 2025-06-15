@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             scheduleContent.innerHTML = '<div class="schedule__loading">Загрузка расписания...</div>';
             
-            const response = await apiRequest('alldata');
+            const response = await apiRequest('alldata', 'GET', null, false);
 
             if (!response || !response.success) {
                 throw new Error('Не удалось загрузить данные');
