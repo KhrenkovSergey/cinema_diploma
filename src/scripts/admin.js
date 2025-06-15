@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!hallName) return alert('Название зала не может быть пустым.');
             
             try {
-                await apiRequest('hall', 'POST', { hallName }, true);
+                await apiRequest('hall', 'POST', { hallName }, false);
                 addHallModal.classList.add('hidden');
                 addHallForm.reset();
                 await loadAllData();
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hallId = deleteBtn.dataset.hallId;
                 if (confirm('Вы уверены, что хотите удалить этот зал? Это действие необратимо.')) {
                     try {
-                        await apiRequest(`hall/${hallId}`, 'DELETE', null, true);
+                        await apiRequest(`hall/${hallId}`, 'DELETE', null, false);
                         await loadAllData();
                     } catch (error) {
                         alert(error.message || 'Не удалось удалить зал.');
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                await apiRequest('film', 'POST', formData, true);
+                await apiRequest('film', 'POST', formData, false);
                 addFilmModal.classList.add('hidden');
                 addFilmForm.reset();
                 posterFileNameSpan.textContent = 'Файл не выбран';
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                await apiRequest(`hall/${selectedHallForConfig.id}`, 'POST', params, true);
+                await apiRequest(`hall/${selectedHallForConfig.id}`, 'POST', params, false);
                 alert('Конфигурация зала успешно сохранена!');
                 await loadAllData();
             } catch (error) {
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                await apiRequest(`price/${selectedHallForPricing.id}`, 'POST', params, true);
+                await apiRequest(`price/${selectedHallForPricing.id}`, 'POST', params, false);
                 alert('Цены успешно сохранены!');
                 await loadAllData();
             } catch (error) {
@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                await apiRequest(`open/${selectedHallForSales.id}`, 'POST', params, true);
+                await apiRequest(`open/${selectedHallForSales.id}`, 'POST', params, false);
                 alert('Статус продаж успешно изменен!');
                 await loadAllData();
             } catch (error) {
@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const filmId = deleteBtn.dataset.filmId;
                 if (confirm('Вы уверены, что хотите удалить этот фильм? Все сеансы с этим фильмом также будут удалены.')) {
                     try {
-                        await apiRequest(`film/${filmId}`, 'DELETE', null, true);
+                        await apiRequest(`film/${filmId}`, 'DELETE', null, false);
                         await loadAllData();
                     } catch (error) {
                         alert(error.message || 'Не удалось удалить фильм.');
@@ -596,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         seanceHallid: hallId,
                         seanceFilmid: filmId,
                         seanceTime: seanceTime
-                    }, true);
+                    }, false);
                     await loadAllData(); 
                 } catch (error) {
                     alert(error.message || 'Ошибка добавления сеанса');
@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const seanceId = deleteBtn.dataset.seanceId;
                  if (confirm('Удалить этот этот сеанс?')) {
                      try {
-                        await apiRequest(`seance/${seanceId}`, 'DELETE', null, true);
+                        await apiRequest(`seance/${seanceId}`, 'DELETE', null, false);
                         await loadAllData();
                      } catch (error) {
                         alert(error.message || 'Не удалось удалить сеанс.');
