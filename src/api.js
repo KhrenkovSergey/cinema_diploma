@@ -54,7 +54,7 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
             localStorage.setItem('authToken', data.result.token);
         }
 
-        return data.result;
+        return data;
     } catch (error) {
         console.error(`API Error on endpoint '${endpoint}': ${error.message}`);
         throw error;

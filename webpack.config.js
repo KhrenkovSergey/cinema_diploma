@@ -13,7 +13,8 @@ module.exports = (env, argv) => {
             main: './src/scripts/main.js',
             booking: './src/scripts/booking.js',
             admin: './src/scripts/admin.js',
-            login: './src/scripts/login.js'
+            login: './src/scripts/login.js',
+            ticket: './src/scripts/ticket.js'
         },
         output: {
             filename: '[name].bundle.js',
@@ -104,6 +105,11 @@ module.exports = (env, argv) => {
                 template: './src/login.html',
                 filename: 'login.html',
                 chunks: ['login']
+            }),
+            new HtmlWebpackPlugin({
+                template: './src/ticket.html',
+                filename: 'ticket.html',
+                chunks: ['ticket']
             }),
         ],
     };

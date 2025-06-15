@@ -41,11 +41,12 @@ body {
 
 // Шапка
 .header {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding: 15px 0;
     margin-bottom: 30px;
 
     &__content {
+        max-width: 990px;
+        margin: 0 auto;
         padding: 0;
         display: flex;
         justify-content: space-between;
@@ -99,15 +100,11 @@ body {
     &__title {
         font-size: 24px;
         font-weight: 700;
-        margin: 0 0 10px;
-        color: $text-color;
-        line-height: 1.6;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
-    &__info {
+    &__meta {
         font-size: 14px;
-        color: #666;
         margin-bottom: 15px;
     }
 
@@ -218,14 +215,8 @@ body {
 
 // Схема зала
 .hall-scheme {
-    margin: 2rem 0;
+    padding: 20px 0;
     text-align: center;
-
-    .row {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 0.5rem;
-    }
 }
 
 .place {
@@ -583,65 +574,24 @@ body {
 // Стили для страницы бронирования
 .booking-info {
     background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     display: flex;
     gap: 20px;
-
-    @media (max-width: 768px) {
-        flex-direction: column;
-    }
+    align-items: flex-start;
 
     &__poster {
         flex-shrink: 0;
-        width: 200px;
-
+        width: 150px;
         img {
             width: 100%;
-            height: auto;
             border-radius: 4px;
         }
-
-        @media (max-width: 768px) {
-            width: 150px;
-            margin: 0 auto;
-        }
     }
-
-    &__details {
-        flex-grow: 1;
-    }
-
+    
     &__title {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    &__meta {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 15px;
-
-        span {
-            &:not(:last-child)::after {
-                content: "•";
-                margin: 0 8px;
-            }
-        }
-    }
-
-    &__description {
-        font-size: 14px;
-        line-height: 1.5;
-        margin-bottom: 15px;
-    }
-
-    &__session {
-        display: flex;
-        gap: 20px;
-        font-size: 14px;
+        color: #333;
     }
 }
 
@@ -662,21 +612,32 @@ body {
     }
 }
 
-.hall-scheme {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    padding: 20px;
+.hall-scheme__grid {
+    display: inline-block;
     margin-bottom: 20px;
+    border: 1px solid #c79100;
+}
+
+.hall-legend {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #3d444c;
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        font-size: 14px;
+    }
 }
 
 .hall-row {
     display: flex;
     gap: 5px;
-    justify-content: center;
 }
 
 .seat {
@@ -697,58 +658,33 @@ body {
     }
 
     &--vip {
-        background: rgba($primary-color, 0.2);
-        border: 1px solid $primary-color;
+        background-color: #f5b400;
+        border: 1px solid #c79100;
     }
 
     &--taken {
-        background: #ccc;
+        background: #495057;
+        border: 1px solid #343a40;
         cursor: not-allowed;
     }
 
     &--selected {
-        background: $primary-color;
-        border-color: $primary-color;
-    }
-}
-
-.hall-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-
-    &__item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-
-        .seat {
-            cursor: default;
-        }
+        background: $primary-color !important;
+        border-color: color.adjust($primary-color, $lightness: -15%) !important;
+        box-shadow: 0 0 10px rgba($primary-color, 0.7);
     }
 }
 
 .booking-total {
     background: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
+    border-radius: 0 0 8px 8px;
     padding: 20px;
-    margin-top: 20px;
-
-    &__info {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        font-size: 16px;
-    }
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
 
     &__button {
-        width: 100%;
+        width: 250px;
         padding: 12px;
         background: $primary-color;
         color: white;
@@ -1128,4 +1064,23 @@ body {
 
 #dnd-films-list {
   margin-top: 12px;
+}
+
+.booking-hall-wrapper {
+    background: #1c232c; // Темно-синий фон
+    border-radius: 0;
+    padding: 20px;
+    margin-top: 0;
+}
+
+.hall-screen-label {
+    text-align: center;
+    color: #8a8a8a;
+    margin: 0 auto 25px auto;
+    border: 1px solid #8a8a8a;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 5px 0;
+    width: 250px;
+    font-weight: 500;
 }

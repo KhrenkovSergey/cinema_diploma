@@ -143,11 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DATA LOADING ---
     async function loadAllData() {
         try {
-            const data = await apiRequest('alldata');
-            if (data && data.success) {
-                halls = data.result.halls || [];
-                films = data.result.films || [];
-                seances = data.result.seances || [];
+            const response = await apiRequest('alldata');
+            if (response && response.success) {
+                const data = response.result;
+                halls = data.halls || [];
+                films = data.films || [];
+                seances = data.seances || [];
                 renderAll();
                 renderSeanceGrid();
             } else {

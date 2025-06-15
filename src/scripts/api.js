@@ -21,13 +21,13 @@ export async function apiRequest(endpoint, method = 'GET', data = null, requireA
             if (data instanceof FormData) {
                 options.body = data;
             } else { // Иначе - создаем FormData из объекта
-                const formData = new FormData();
-                Object.entries(data).forEach(([key, value]) => {
+            const formData = new FormData();
+            Object.entries(data).forEach(([key, value]) => {
                     if (value !== null && value !== undefined) {
-                        formData.append(key, value);
+                formData.append(key, value);
                     }
-                });
-                options.body = formData;
+            });
+            options.body = formData;
             }
         }
 

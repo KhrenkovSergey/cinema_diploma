@@ -33,13 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Загрузка расписания для даты:', date);
             scheduleContent.innerHTML = '<div class="schedule__loading">Загрузка расписания...</div>';
             
-            const response = await apiRequest('alldata', 'GET', null, false);
-            
-            if (!response) {
+            const response = await apiRequest('alldata');
+
+            if (!response || !response.success) {
                 throw new Error('Не удалось загрузить данные');
             }
-            
-            // Извлекаем данные из свойства result
+
             const data = response.result;
             if (!data || !data.films || !data.seances || !data.halls) {
                 throw new Error('Некорректные данные от сервера');

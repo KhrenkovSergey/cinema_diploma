@@ -100,19 +100,17 @@
 </head>
 <body class="admin-page">
   <div class="admin-bg"></div>
-  <header class="admin-header">
-    <div class="container">
-      <div class="admin-header-row">
-        <div class="admin-logo-block">
-          <a href="index.html" class="header__logo" style="text-decoration:none;">
-            <span class="header__logo-text">Идём</span>
-            <span class="header__logo-text header__logo-text--accent">в</span>
-            <span class="header__logo-text">кино</span>
-          </a>
-          <div class="admin-subtitle">АДМИНИСТРАТОРСКАЯ</div>
-        </div>
-        <a href="index.html" class="btn btn-outline-light admin-logout-btn">Выйти</a>
+  <header class="admin-header container">
+    <div class="admin-header-row">
+      <div class="admin-logo-block">
+        <a href="index.html" class="header__logo" style="text-decoration:none;">
+          <span class="header__logo-text">Идём</span>
+          <span class="header__logo-text header__logo-text--accent">в</span>
+          <span class="header__logo-text">кино</span>
+        </a>
+        <div class="admin-subtitle">АДМИНИСТРАТОРСКАЯ</div>
       </div>
+      <a href="index.html" class="btn btn-outline-light admin-logout-btn">Выйти</a>
     </div>
   </header>
 
@@ -250,33 +248,33 @@
         <button class="btn-reset modal__close" id="close-add-film-modal">&times;</button>
       </div>
       <div class="modal__body">
-        <form id="add-film-form">
-          <div class="form-group">
+      <form id="add-film-form">
+        <div class="form-group">
             <label for="film-title-input">Название фильма</label>
             <input type="text" class="form-control" id="film-title-input" placeholder="Например, «Гражданин Кейн»" required>
-          </div>
-          <div class="form-group">
+        </div>
+        <div class="form-group">
             <label for="film-duration-input">Продолжительность фильма (мин.)</label>
             <input type="number" class="form-control" id="film-duration-input" placeholder="90" required>
-          </div>
-          <div class="form-group">
+        </div>
+        <div class="form-group">
             <label for="film-description-input">Описание фильма</label>
             <textarea class="form-control" id="film-description-input" rows="3"></textarea>
-          </div>
-           <div class="form-group">
+        </div>
+        <div class="form-group">
             <label for="film-origin-input">Страна</label>
             <input type="text" class="form-control" id="film-origin-input" placeholder="США">
-          </div>
-          <div class="form-group">
+        </div>
+        <div class="form-group">
               <label for="film-poster-input" class="btn btn-secondary">Загрузить постер</label>
               <input type="file" id="film-poster-input" accept="image/png" style="display: none;">
               <span id="poster-file-name" class="ms-2">Файл не выбран</span>
-          </div>
-          <div class="modal__footer">
-            <button type="submit" class="btn btn-primary">Добавить фильм</button>
+        </div>
+        <div class="modal__footer">
+          <button type="submit" class="btn btn-primary">Добавить фильм</button>
             <button type="button" class="btn btn-outline-secondary" id="cancel-add-film">Отменить</button>
-          </div>
-        </form>
+        </div>
+      </form>
       </div>
     </div>
   </div>

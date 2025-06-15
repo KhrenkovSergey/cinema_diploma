@@ -8,54 +8,35 @@
 </head>
 <body class="bg-booking">
     <header class="header">
-        <div class="container">
-            <div class="header__content">
-                <a href="index.html" class="header__logo" style="text-decoration:none;">
-                    <span class="header__logo-text">Идём</span>
-                    <span class="header__logo-text header__logo-text--accent">в</span>
-                    <span class="header__logo-text">кино</span>
-                </a>
-            </div>
+        <div class="header__content">
+            <a href="index.html" class="header__logo" style="text-decoration:none;">
+                <span class="header__logo-text">Идём</span>
+                <span class="header__logo-text header__logo-text--accent">в</span>
+                <span class="header__logo-text">кино</span>
+            </a>
         </div>
     </header>
 
-    <main class="container my-4">
+    <main class="container">
         <!-- Информация о фильме и сеансе -->
-        <div id="booking-info" class="mb-4">
+        <section class="booking-info">
             <!-- Здесь будет информация о фильме -->
-        </div>
+        </section>
 
-        <!-- Схема зала -->
-        <div class="hall-scheme mb-4">
-            <div id="hall">
-                <!-- Здесь будет схема зала -->
-            </div>
-
-            <!-- Легенда -->
-            <div class="legend mt-3 d-flex justify-content-center gap-4">
-                <div class="d-flex align-items-center">
-                    <div class="place standart me-2"></div>
-                    <span>Свободно (<span id="standart-price">250</span> руб)</span>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="place vip me-2"></div>
-                    <span>VIP (<span id="vip-price">350</span> руб)</span>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="place taken me-2"></div>
-                    <span>Занято</span>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="place selected me-2"></div>
-                    <span>Выбрано</span>
+        <section class="booking-hall-wrapper">
+            <div class="hall-scheme">
+                <div id="hall">
+                    <!-- Здесь будет схема зала -->
                 </div>
             </div>
-        </div>
+            <div class="hall-legend">
+                <!-- Легенда будет рендериться здесь -->
+            </div>
+        </section>
 
-        <!-- Кнопка бронирования -->
-        <div class="text-center">
-            <button id="book" class="btn btn-primary btn-lg">Забронировать</button>
-        </div>
+        <section class="booking-total">
+            <button class="booking-total__button" disabled>Забронировать</button>
+        </section>
     </main>
 
     <script src="booking.bundle.js"></script>
