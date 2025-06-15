@@ -14,6 +14,8 @@ export async function apiRequest(endpoint, method = 'GET', data = null, requireA
 
         if (requireAuth) {
             options.credentials = 'include';
+        } else {
+            options.credentials = 'omit';
         }
 
         if (data) {

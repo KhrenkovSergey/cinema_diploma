@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DATA LOADING ---
     async function loadAllData() {
         try {
-            const response = await apiRequest('alldata', 'GET', null, true);
+            const response = await apiRequest('alldata', 'GET', null, false);
             if (response && response.success) {
                 const data = response.result;
             halls = data.halls || [];
