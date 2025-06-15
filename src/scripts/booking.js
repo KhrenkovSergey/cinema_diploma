@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     seanceId: seanceId,
                     ticketDate: date,
                     tickets: JSON.stringify(tickets)
-                });
+                }, false);
 
                 // Сохраняем данные для страницы билета
                 const ticketPageData = {
