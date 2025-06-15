@@ -16,24 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const params = new URLSearchParams();
-            params.append('login', email);
-            params.append('password', password);
+            const formData = new FormData();
+            formData.append('login', email);
+            formData.append('password', password);
             
             // Используем нашу централизованную функцию
             // requireAuth = true здесь нужен, так как это запрос на авторизацию
-            const result = await apiRequest('login', 'POST', params, true);
+            const result = await apiRequest('login', 'POST', formData, true);
 
-            if (result && result.success) {
+            // `apiRequest` возвращает null при ошибке, и объект с данными при успехе.
+            // Для успешного логина, сервер возвращает непустой ответ, поэтому result не будет null.
+            if (result) {
                 localStorage.setItem('adminAuth', 'true');
                 window.location.href = 'admin.html';
             } else {
-                const errorMessage = result ? 'Неверный E-mail или пароль.' : 'Произошла ошибка при попытке авторизации. Пожалуйста, проверьте подключение к интернету и попробуйте снова.';
+                const errorMessage = 'Произошла ошибка при попытке авторизации. Пожалуйста, проверьте подключение к интернету и попробуйте снова.';
                 alert(errorMessage);
             }
         } catch (error) {
             console.error('Ошибка при авторизации:', error);
-            alert('Произошла критическая ошибка. Пожалуйста, проверьте консоль.');
+            // Покажем пользователю ошибку, которую вернул сервер
+            alert(error.message || 'Произошла критическая ошибка. Пожалуйста, проверьте консоль.');
         }
     });
 }); 

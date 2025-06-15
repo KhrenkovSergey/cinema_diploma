@@ -39,7 +39,7 @@ module.exports = (env, argv) => {
                     pathRewrite: { '^/api': '' },
                 },
                 {
-                    context: ['/img'],
+                    context: ['/storage'],
                     target: 'https://shfe-diplom.neto-server.ru',
                     changeOrigin: true,
                 }

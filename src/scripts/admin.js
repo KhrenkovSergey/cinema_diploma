@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/main.scss';
+import '../styles/admin.scss';
 import { apiRequest } from './api';
 import deleteButtonImg from '../assets/button.png';
 
@@ -34,7 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const posterFileInput = document.getElementById('film-poster-input');
     const posterFileNameSpan = document.getElementById('poster-file-name');
 
-    const filmColors = ['#c8e6c9', '#fff9c4', '#ffcdd2', '#d1c4e9', '#b2ebf2'];
+    const filmColors = [
+        '#c8e6c9', '#fff9c4', '#ffcdd2', '#d1c4e9', '#b2ebf2', '#f8bbd0',
+        '#e1bee7', '#bbdefb', '#d7ccc8', '#ffe0b2', '#ffccbc', '#bcaaa4'
+    ];
 
     const hallConfigForm = document.getElementById('hall-config-form');
     const hallConfigSelect = document.getElementById('hall-config-select');
@@ -51,17 +54,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const salesHallSelect = document.getElementById('sales-hall-select');
     const openSalesBtn = openSalesForm ? openSalesForm.querySelector('button[type="submit"]') : null;
 
+    // --- DND State ---
+    let draggedElement = null;
+    const totalMinutesInTimeline = 24 * 60;
+
     // --- RENDER FUNCTIONS ---
     function renderHalls() {
         if (!hallsList) return;
-        hallsList.innerHTML = '<ul>' + halls.map(hall => `
-            <li>
-              <span>- ${hall.hall_name}</span>
+        hallsList.innerHTML = halls.map(hall => `
+            <div class="hall-item">
+              <span>${hall.hall_name}</span>
               <a href="#" class="btn-reset delete-hall-btn" data-hall-id="${hall.id}" aria-label="Удалить зал">
                 <img src="${deleteButtonImg}" alt="Удалить зал">
               </a>
-            </li>
-        `).join('') + '</ul>' || '<p>Залов пока нет. Создайте первый!</p>';
+            </div>
+        `).join('') || '<p>Залов пока нет. Создайте первый!</p>';
         populateHallSelects();
     }
 
@@ -135,15 +142,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DATA LOADING ---
     async function loadAllData() {
-        const data = await apiRequest('alldata');
-        if (data && data.success) {
-            halls = data.result.halls || [];
-            films = data.result.films || [];
-            seances = data.result.seances || [];
-            renderAll();
-            initializeSeanceGrid();
-        } else {
-            if (hallsList) hallsList.innerHTML = `<p class="text-danger">Не удалось загрузить данные о залах.</p>`;
+        try {
+            const data = await apiRequest('alldata');
+            if (data && data.success) {
+                halls = data.result.halls || [];
+                films = data.result.films || [];
+                seances = data.result.seances || [];
+                renderAll();
+                renderSeanceGrid();
+            } else {
+                throw new Error('Не удалось получить данные с сервера');
+            }
+        } catch (error) {
+            if (hallsList) hallsList.innerHTML = `<p class="text-danger">${error.message}</p>`;
+            console.error(error);
         }
     }
 
@@ -160,14 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const hallName = addHallForm.querySelector('[name="hallName"]').value.trim();
             if (!hallName) return alert('Название зала не может быть пустым.');
             
-            const result = await apiRequest('hall', 'POST', { hallName });
-            if (result && result.success) {
+            try {
+                await apiRequest('hall', 'POST', { hallName });
                 addHallModal.classList.add('hidden');
                 addHallForm.reset();
                 await loadAllData();
-            } else {
-                const errorMessage = result ? result.error : 'Произошла неизвестная ошибка. Возможно, проблема с сетью.';
-                alert(errorMessage);
+            } catch (error) {
+                alert(error.message || 'Произошла ошибка при добавлении зала.');
             }
         });
     }
@@ -180,12 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 const hallId = deleteBtn.dataset.hallId;
                 if (confirm('Вы уверены, что хотите удалить этот зал? Это действие необратимо.')) {
-                    const result = await apiRequest(`hall/${hallId}`, 'DELETE');
-                    if (result && result.success) {
+                    try {
+                        await apiRequest(`hall/${hallId}`, 'DELETE');
                         await loadAllData();
-                    } else {
-                        const errorMessage = result ? result.error : 'Не удалось удалить зал.';
-                        alert(errorMessage);
+                    } catch (error) {
+                        alert(error.message || 'Не удалось удалить зал.');
                     }
                 }
             }
@@ -225,16 +235,14 @@ document.addEventListener('DOMContentLoaded', () => {
                  formData.append('filePoster', posterFileInput.files[0]);
             }
 
-            const result = await apiRequest('film', 'POST', formData);
-
-            if (result && result.success) {
+            try {
+                await apiRequest('film', 'POST', formData);
                 addFilmModal.classList.add('hidden');
                 addFilmForm.reset();
                 posterFileNameSpan.textContent = 'Файл не выбран';
                 await loadAllData();
-            } else {
-                const errorMessage = result ? result.error : 'Произошла ошибка при добавлении фильма.';
-                alert(errorMessage);
+            } catch (error) {
+                alert(error.message || 'Произошла ошибка при добавлении фильма.');
             }
         });
     }
@@ -319,10 +327,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 config: JSON.stringify(newConfig)
             };
             
-            const result = await apiRequest(`hall/${selectedHallForConfig.id}`, 'POST', params);
-            if(result !== null) {
+            try {
+                await apiRequest(`hall/${selectedHallForConfig.id}`, 'POST', params);
                 alert('Конфигурация зала успешно сохранена!');
                 await loadAllData();
+            } catch (error) {
+                alert(error.message || 'Ошибка сохранения конфигурации зала.');
             }
         });
     }
@@ -349,10 +359,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 priceVip: vipPriceInput.value
             };
 
-            const result = await apiRequest(`price/${selectedHallForPricing.id}`, 'POST', params);
-            if (result !== null) {
+            try {
+                await apiRequest(`price/${selectedHallForPricing.id}`, 'POST', params);
                 alert('Цены успешно сохранены!');
                 await loadAllData();
+            } catch (error) {
+                alert(error.message || 'Ошибка сохранения цен.');
             }
         });
     }
@@ -389,16 +401,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 hallOpen: Number(selectedHallForSales.hall_open) === 1 ? '0' : '1'
             };
             
-            const result = await apiRequest(`open/${selectedHallForSales.id}`, 'POST', params);
-            if(result !== null) {
+            try {
+                await apiRequest(`open/${selectedHallForSales.id}`, 'POST', params);
                 alert('Статус продаж успешно изменен!');
                 await loadAllData();
+            } catch (error) {
+                alert(error.message || 'Ошибка изменения статуса продаж.');
             }
         });
     }
 
     // --- DnD Сетка сеансов ---
-    function initializeSeanceGrid() {
+    function renderSeanceGrid() {
         const dndFilmsList = document.getElementById('dnd-films-list');
         const dndTimelines = document.getElementById('dnd-timelines');
 
@@ -406,28 +420,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Рендер списка фильмов для перетаскивания
         dndFilmsList.innerHTML = '';
-        dndFilmsList.className = 'row gy-3'; // Используем Bootstrap Grid
+        dndFilmsList.className = ''; 
 
-        films.forEach(film => {
-            const filmWrapper = document.createElement('div');
-            // Каждая плитка - это колонка. На средних экранах (md) и больше - 3 в ряд (col-md-4)
-            filmWrapper.className = 'col-md-4'; 
-
+        films.forEach((film, index) => {
             const filmEl = document.createElement('div');
             filmEl.className = 'dnd-film-item';
             filmEl.draggable = true;
             filmEl.dataset.filmId = film.id;
             filmEl.dataset.duration = film.film_duration;
-            const bgColor = filmColors[film.id % filmColors.length];
+            const bgColor = filmColors[index % filmColors.length];
             filmEl.style.backgroundColor = bgColor;
 
-            const posterDiv = document.createElement('div');
-            posterDiv.className = 'dnd-film-item__poster';
-
+            const posterImg = document.createElement('img');
+            posterImg.className = 'dnd-film-item__poster';
+            posterImg.alt = film.film_name;
             try {
-                // Преобразуем абсолютный URL в относительный для прокси
-                const posterUrl = new URL(film.film_poster);
-                posterDiv.style.backgroundImage = `url(${posterUrl.pathname})`;
+                // Прямой путь к постеру, прокси настроен
+                posterImg.src = film.film_poster;
             } catch (e) {
                 console.error(`Invalid poster URL: ${film.film_poster}`);
             }
@@ -446,23 +455,24 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteLink.setAttribute('aria-label', 'Удалить фильм');
             deleteLink.innerHTML = `<img src="${deleteButtonImg}" alt="Удалить фильм">`;
 
-            filmEl.appendChild(posterDiv);
+            filmEl.appendChild(posterImg);
             filmEl.appendChild(infoDiv);
             filmEl.appendChild(deleteLink);
 
-            filmWrapper.appendChild(filmEl);
-            dndFilmsList.appendChild(filmWrapper);
+            dndFilmsList.appendChild(filmEl);
         });
 
-        // 2. Рендер таймлайнов
+        // 2. Рендер таймлайнов по новому макету
         dndTimelines.innerHTML = '';
-        const totalMinutesInTimeline = 24 * 60; 
 
         halls.forEach(hall => {
             const hallDiv = document.createElement('div');
             hallDiv.className = 'dnd-hall-block';
             hallDiv.innerHTML = `<h5 class="dnd-hall-block__title">${hall.hall_name}</h5>`;
             
+            const timelineWrapper = document.createElement('div');
+            timelineWrapper.className = 'dnd-timeline-wrapper';
+
             const timeline = document.createElement('div');
             timeline.className = 'dnd-timeline';
             timeline.dataset.hallId = hall.id;
@@ -482,42 +492,84 @@ document.addEventListener('DOMContentLoaded', () => {
                 seanceEl.dataset.seanceId = seance.id;
                 seanceEl.dataset.filmId = film.id;
                 
-                const filmColor = filmColors[film.id % filmColors.length];
+                const filmIndex = films.findIndex(f => f.id === film.id);
+                const filmColor = filmColors[filmIndex % filmColors.length];
                 seanceEl.style.backgroundColor = filmColor;
                 seanceEl.style.left = `${(seanceStartInMinutes / totalMinutesInTimeline) * 100}%`;
                 seanceEl.style.width = `${(filmDuration / totalMinutesInTimeline) * 100}%`;
                 
                 seanceEl.innerHTML = `
                     <p class="dnd-seance__title">${film.film_name}</p>
-                    <p class="dnd-seance__time">${seance.seance_time}</p>
                     <button class="btn-reset dnd-seance__delete" data-seance-id="${seance.id}">&times;</button>
                 `;
                 timeline.appendChild(seanceEl);
             });
             
-            hallDiv.appendChild(timeline);
+            const timelineScale = document.createElement('div');
+            timelineScale.className = 'dnd-timeline-scale';
+            for (let hour = 0; hour < 24; hour++) {
+                const hourMark = document.createElement('div');
+                hourMark.className = 'dnd-timeline-scale__hour';
+                if (hour % 2 === 0 && hour > 0) { // Метка каждые 2 часа, кроме 00
+                    hourMark.textContent = `${String(hour).padStart(2, '0')}:00`;
+                }
+                timelineScale.appendChild(hourMark);
+            }
+
+            timelineWrapper.appendChild(timeline);
+            timelineWrapper.appendChild(timelineScale);
+            hallDiv.appendChild(timelineWrapper);
             dndTimelines.appendChild(hallDiv);
         });
 
-        // 3. Логика DND
-        let draggedElement = null;
+        // Логика DND и обработчики событий были перенесены из этой функции, 
+        // чтобы избежать их повторного назначения при каждом обновлении данных.
+    }
 
+    // --- DnD Event Listeners ---
+    const dndFilmsList = document.getElementById('dnd-films-list');
+    const dndTimelines = document.getElementById('dnd-timelines');
+
+    if (dndFilmsList) {
+        // Начало перетаскивания фильма
         dndFilmsList.addEventListener('dragstart', e => {
             if (e.target.classList.contains('dnd-film-item')) {
                 draggedElement = e.target;
             }
         });
-        
+
+        // Удаление фильма
+        dndFilmsList.addEventListener('click', async (e) => {
+            const deleteBtn = e.target.closest('.delete-film-btn');
+            if (deleteBtn) {
+                e.preventDefault();
+                const filmId = deleteBtn.dataset.filmId;
+                if (confirm('Вы уверены, что хотите удалить этот фильм? Все сеансы с этим фильмом также будут удалены.')) {
+                    try {
+                        await apiRequest(`film/${filmId}`, 'DELETE');
+                        await loadAllData();
+                    } catch (error) {
+                        alert(error.message || 'Не удалось удалить фильм.');
+                    }
+                }
+            }
+        });
+    }
+
+    if (dndTimelines) {
+        // Начало перетаскивания сеанса
         dndTimelines.addEventListener('dragstart', e => {
             if (e.target.classList.contains('dnd-seance')) {
                 draggedElement = e.target;
             }
         });
 
+        // Разрешаем бросать элементы на таймлайн
         dndTimelines.addEventListener('dragover', e => {
             e.preventDefault();
         });
 
+        // Обработка бросания элемента (добавление сеанса)
         dndTimelines.addEventListener('drop', async e => {
             e.preventDefault();
             const timeline = e.target.closest('.dnd-timeline');
@@ -531,40 +583,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const hours = Math.floor(dropTimeInMinutes / 60);
             const minutes = dropTimeInMinutes % 60;
             const seanceTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-            
             const filmId = draggedElement.dataset.filmId;
 
-            // TODO: Проверка на пересечение сеансов
-
-            if (draggedElement.classList.contains('dnd-film-item')) { // Добавление нового сеанса
-                const result = await apiRequest('seance', 'POST', {
-                    seanceHallid: hallId,
-                    seanceFilmid: filmId,
-                    seanceTime: seanceTime
-                });
-
-                if (result && result.success) {
+            if (draggedElement.classList.contains('dnd-film-item')) {
+                try {
+                    await apiRequest('seance', 'POST', {
+                        seanceHallid: hallId,
+                        seanceFilmid: filmId,
+                        seanceTime: seanceTime
+                    });
                     await loadAllData(); 
-                } else {
-                    alert(result.error || 'Ошибка добавления сеанса');
+                } catch (error) {
+                    alert(error.message || 'Ошибка добавления сеанса');
                 }
             }
             draggedElement = null;
         });
 
-        // 4. Удаление сеанса
+        // Удаление сеанса
         dndTimelines.addEventListener('click', async (e) => {
             const deleteBtn = e.target.closest('.dnd-seance__delete');
             if(deleteBtn) {
                 const seanceId = deleteBtn.dataset.seanceId;
-                 if (confirm('Удалить этот сеанс?')) {
-                     // Предполагаем, что есть такой эндпоинт, хоть его и нет в доках
-                     const result = await apiRequest(`seance/${seanceId}`, 'DELETE');
-                     if(result && result.success) {
-                         await loadAllData();
-                     } else {
-                         const errorMessage = result ? result.error : 'Не удалось удалить сеанс.';
-                         alert(errorMessage);
+                 if (confirm('Удалить этот этот сеанс?')) {
+                     try {
+                        await apiRequest(`seance/${seanceId}`, 'DELETE');
+                        await loadAllData();
+                     } catch (error) {
+                        alert(error.message || 'Не удалось удалить сеанс.');
                      }
                  }
             }

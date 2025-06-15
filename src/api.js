@@ -16,25 +16,36 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
         };
 
         if (body) {
-            const formData = new FormData();
-            Object.entries(body).forEach(([key, value]) => {
-                if (value !== null && value !== undefined) {
-                    formData.append(key, value);
-                }
-            });
-            options.body = formData;
+            // Если тело запроса уже является объектом FormData (например, при загрузке файла),
+            // используем его напрямую. В противном случае, создаем новый объект FormData
+            // из переданного объекта.
+            if (body instanceof FormData) {
+                options.body = body;
+            } else {
+                const formData = new FormData();
+                Object.entries(body).forEach(([key, value]) => {
+                    if (value !== null && value !== undefined) {
+                        formData.append(key, value);
+                    }
+                });
+                options.body = formData;
+            }
         }
 
         const response = await fetch(`${API_BASE}${endpoint}`, options);
-        const data = await response.json();
+        
+        // Попытка получить JSON даже при ошибке, чтобы извлечь сообщение
+        const data = await response.json().catch(() => null);
 
-        if (!data.success) {
-            throw new Error(data.error || 'Ошибка запроса');
+        if (!response.ok || (data && !data.success)) {
+            const errorMessage = (data && data.error) ? data.error : `HTTP ошибка! Статус: ${response.status}`;
+            throw new Error(errorMessage);
         }
 
         return data.result;
     } catch (error) {
-        console.error(`API Error: ${error.message}`);
-        return null;
+        console.error(`API Error on endpoint '${endpoint}': ${error.message}`);
+        // Пробрасываем ошибку дальше, чтобы ее можно было поймать в вызывающем коде
+        throw error;
     }
 }
